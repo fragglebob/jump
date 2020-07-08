@@ -1,0 +1,17 @@
+float segments = 40.;
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // Normalized pixel coordinates (from 0 to 1)
+    vec2 uv = fragCoord/iResolution.xy;
+    
+    //uv.x += fract(iTime);
+    
+    float index = floor(uv.x * segments) / 20.;
+    
+    //uv.y -= sin(iTime + index) / 10.;
+    uv.y -= ((fract(iTime + index) * 2.) - 1.) / 10.;
+
+    // Output to screen
+    fragColor = texture(iChannel0, uv);
+}

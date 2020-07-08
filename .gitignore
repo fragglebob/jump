@@ -1,0 +1,11 @@
+bin/ofApp
+.idea/
+.vscode/
+build/
+CMakeFiles/
+obj/
+
+CMakeCache.txt
+compile_commands.json
+Makefile
+Makefile.bak
