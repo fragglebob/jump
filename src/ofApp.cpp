@@ -135,8 +135,6 @@ void ofApp::draw(){
     ofPushMatrix();
 
     ofTranslate(midX,midY);
-    ofRotateDeg(ofGetFrameNum() / 6.0f, 0.2f, 0.4f, 1.0f);
-
 
     if(errors[0] == false) {
         sol::protected_function drawFx = lua["draw"];

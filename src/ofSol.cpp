@@ -10,6 +10,52 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
         static_cast<void(*)(float, float, float, float, float, float)> (&ofDrawLine)
     ));
 
+    of.set_function("box", sol::overload(
+        static_cast<void(*)(float)> (&ofDrawBox),
+        static_cast<void(*)(float, float, float)> (&ofDrawBox),
+        static_cast<void(*)(float, float, float, float)> (&ofDrawBox),
+        static_cast<void(*)(float, float, float, float, float, float)> (&ofDrawBox)
+    ));
+
+    of.set_function("ball", sol::overload(
+        static_cast<void(*)(float)> (&ofDrawSphere),
+        static_cast<void(*)(float, float, float, float)> (&ofDrawSphere)
+    ));
+
+    of.set_function("pushMatrix", &ofPushMatrix);
+    of.set_function("popMatrix", &ofPopMatrix);
+
+    of.set_function("rotate", sol::overload(
+        static_cast<void(*)(float)> (&ofRotateDeg),
+        static_cast<void(*)(float, float, float, float)> (&ofRotateDeg)
+    ));
+
+    of.set_function("rotateX", &ofRotateXDeg);
+    of.set_function("rotateY", &ofRotateYDeg);
+    of.set_function("rotateZ", &ofRotateZDeg);
+
+    of.set_function("rotateRad", sol::overload(
+        static_cast<void(*)(float)> (&ofRotateRad),
+        static_cast<void(*)(float, float, float, float)> (&ofRotateRad)
+    ));
+
+    of.set_function("rotateXRad", &ofRotateXRad);
+    of.set_function("rotateYRad", &ofRotateYRad);
+    of.set_function("rotateZRad", &ofRotateZRad);
+
+    of.set_function("scale", sol::overload(
+        static_cast<void(*)(float)> (&ofScale),
+        static_cast<void(*)(float, float, float)> (&ofScale)
+    ));
+
+    of.set_function("translate", sol::overload(
+        [](float x, float y) { ofTranslate(x, y, 0.0f); },
+        [](float x, float y, float z) { ofTranslate(x, y, z); }
+    ));
+
+    of.set_function("pushStyle", &ofPushStyle);
+    of.set_function("popStyle", &ofPopStyle);
+
     of.set_function("line_width", &ofSetLineWidth);
 
     of.set_function("color", sol::overload(

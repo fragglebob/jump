@@ -1,30 +1,29 @@
 function draw()
 
-    -- of.fx_kale(of.lerp(1, 10, of.slider(0)))
-    -- of.fx_grid(of.lerp(1, 16, of.slider(1)))
-    -- of.fx_wave(of.lerp(1, 32, of.slider(2)))
+    -- of.fx_kale(8)
+    -- of.fx_grid(12)
+    -- of.fx_wave(12)
 
-    of.blend_mode("add")
+    of.blend_mode("screen")
     -- of.line_width(of.fft(1) * 6 + 1)
 
-    -- of.color(250, 200, 100)
 
-    local time = of.frame();
+    of.color(200, 20, 100)
 
-    for i = 60,1,-1 
+
+    of.rotate(of.frame(), 0.7, 0.2, 0.4)
+    
+    of.scale(of.fft(1) * 10)
+
+
+    for i = 20,1,-1 
     do 
-        local t = (time + i * 20) / 1000;
-        local scale = math.pow((t - (math.floor(t))) * 2, 10);
-        of.color(250 * i/60, of.fft(1) * 200, 100)
-
-        of.line_width(scale* 5)
-
-        of.line(-100 * scale, -100 * scale, -100 * scale, 100 * scale)
-        of.line(-100 * scale, -100 * scale, 100 * scale, -100 * scale)
-        of.line(100 * scale, -100 * scale, 100 * scale, 100 * scale)
-        of.line(100 * scale, 100 * scale, -100 * scale, 100 * scale)
+        of.pushMatrix()
+        of.rotate(of.frame() + i * 137, 0.1, 0.2, 0.4)
+        of.translate(100, 200, 0)
+        of.box(100)
+        of.popMatrix()
     end
-
 
 
 
