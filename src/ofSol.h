@@ -15,6 +15,7 @@ public:
 
     void create_interop(sol::state& lua, ofApp& app);
     void blendMode(std::string mode);
+    void hslColor(float hue, float saturation, float light);
 
 };
 

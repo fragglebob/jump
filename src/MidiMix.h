@@ -7,14 +7,18 @@ class MidiMix : public ofxMidiListener  {
     public:
 
     ofxMidiIn midiIn;
+    ofxMidiOut midiOut;
+
+    ofEvent<float> onBpmTap;
 
     void setup();
     void newMidiMessage(ofxMidiMessage& eventArgs);
 
     float knobs[24];
     float sliders[9];
+    bool lights[26];
 
-    float getSlider(int pos) { 
+    float getSlider(int pos) {
         if(pos < 0 || pos >= 9) {
             return 0.f;
         }
@@ -26,5 +30,7 @@ class MidiMix : public ofxMidiListener  {
         }
         return knobs[pos];
     }
+
+    void updateLights();
 
 };

@@ -52,6 +52,8 @@ void ofApp::setup(){
     ofSetBackgroundAuto(true);
 
     midiMix.setup();
+    ofAddListener(midiMix.onBpmTap, this, &ofApp::handleBpmTap);
+    setBpm(120);
 
     for (size_t i = 0; i < 10; i++)
     {
@@ -71,6 +73,91 @@ void ofApp::setup(){
 
     modTimes[0] = std::filesystem::last_write_time(ofToDataPath("0.lua"));
     
+}
+
+void ofApp::handleBpmTap(float &time) {
+
+    if(time - lastBpmTap > 4 || lastBpmTap == 0.f) {
+        bpmTapCount = 0;
+        for (size_t i = 0; i < 10; i++)
+        {
+            bpmTaps[i] = 0.0f;
+        }
+        lastBpmTap = time;
+        return;
+    }
+
+    if(bpmTapCount > 9) {
+        for (size_t i = 1; i < 10; i++)
+        {
+            bpmTaps[i-1] = bpmTaps[i];
+        }
+        bpmTaps[9] = time - lastBpmTap;
+    } else {
+        bpmTaps[bpmTapCount] = time - lastBpmTap;
+    }
+
+    if(bpmTapCount > 4) {
+        size_t itemsToCheck = min(bpmTapCount + 1, 10);
+        float total = 0.f;
+        for (size_t i = 0; i < itemsToCheck; i++)
+        {
+            total += bpmTaps[i];
+        }
+
+        setBpm(60 / (total / itemsToCheck));
+        
+    }
+
+    lastBpmTap = time;
+    bpmTapCount++;
+    
+}
+
+void ofApp::setBpm(float bpm) {
+    
+    currentBpm = bpm;
+    currentBpmSetTime = ofGetElapsedTimef();
+    updateBeat();
+    cout << "bpm: " << bpm << endl;
+}
+
+void ofApp::updateBeat() {
+
+    float now = ofGetElapsedTimef();
+
+    float secondsPerBeat = 60.f / currentBpm;
+
+    float diff = now - currentBpmSetTime;
+
+    float beatsElapsedSinceSet = diff / secondsPerBeat;
+
+    int totalBeats = (int) beatsElapsedSinceSet;
+    
+    currentBar = totalBeats / 4;
+    currentBeat = totalBeats % 4;
+
+    beatProgress = beatsElapsedSinceSet;
+    barProgress = beatsElapsedSinceSet / 4.f;
+
+    // 0 1 2 3  4  5  6  7
+    // 3 6 9 12 15 18 21 24
+
+    for (size_t i = 0; i < 8; i++)
+    {
+        midiMix.lights[(i + 1) * 3 - 1] = false;
+    }
+
+    int light = currentBeat;
+
+    if(currentBar % 2 != 0) {
+        light += 4;
+    }
+
+    midiMix.lights[(light + 1) * 3 - 1] = true;
+
+    midiMix.updateLights();
+
 }
 
 bool ofApp::loadScript(std::string path) {
@@ -110,6 +197,9 @@ void ofApp::update(){
         errors[0] = false;
         loadScript(ofToDataPath("0.lua"));
     }
+
+    updateBeat();
+
 }
 
 

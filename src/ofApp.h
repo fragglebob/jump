@@ -54,6 +54,28 @@ class ofApp : public ofBaseApp {
 		void gotMessage(ofMessage msg);
 
         void audioIn(ofSoundBuffer & input);
+
+		int bpm = 120;
+		int bpmTapCount = 0;
+		float lastBpmTap;
+		float bpmTaps[10];
+
+
+
+		void handleBpmTap(float &time);
+
+		float currentBpm;
+		float currentBpmSetTime;
+
+		int currentBeat;
+		int currentBar;
+
+		float barProgress;
+		float beatProgress;
+
+		void setBpm(float bpm);
+
+		void updateBeat();
 		
 	private:
 
