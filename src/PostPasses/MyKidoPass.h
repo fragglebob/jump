@@ -14,10 +14,14 @@ public:
     
     float getSegments(){ return segments; }
     void setSegments(float v) { segments = v; }
+
+    bool getTime(){ return timePass; }
+    void setTime(bool time) { timePass = time; }
     
 private:
     
     ofShader shader;
+    bool timePass;
     float segments;
     
 };

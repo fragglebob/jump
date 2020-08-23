@@ -99,6 +99,10 @@ void MidiMix::newMidiMessage(ofxMidiMessage& eventArgs) {
 
 void MidiMix::updateLights() {
 
+    if(!midiOut.isOpen()) {
+        return;
+    }
+
     for (size_t i = 0; i < sizeof(lights); i++)
     {
         midiOut.sendNoteOn(1, i + 1, lights[i] ? 0x7f : 0x00);

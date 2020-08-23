@@ -28,6 +28,8 @@ MyKidoPass::MyKidoPass(const ofVec2f& aspect, bool arb, float segments) :
         segments(segments), RenderPass(aspect, arb, "MyKido")
     {
         
+        timePass = true;
+
         string fragShaderSrc = STRINGIFY(
 
                 uniform sampler2D tDiffuse;
@@ -82,14 +84,19 @@ MyKidoPass::MyKidoPass(const ofVec2f& aspect, bool arb, float segments) :
     {
         writeFbo.begin();
         
-        
         shader.begin();
         
         shader.setUniformTexture("tDiffuse", readFbo.getTexture(), 0);
         shader.setUniform1f("_Offset", 0.0f);
-        shader.setUniform1f("_Roll", ofGetElapsedTimef() / 10.0f);
         shader.setUniform1f("_Divisor", PI * 2 / max(segments, 1.0f));
-        shader.setUniform1f("iTime", ofGetElapsedTimef());
+
+        if(timePass) {
+            shader.setUniform1f("_Roll", ofGetElapsedTimef() / 10.0f);
+            shader.setUniform1f("iTime", ofGetElapsedTimef());
+        } else {
+            shader.setUniform1f("_Roll", 0.0f);
+            shader.setUniform1f("iTime", 0.0f);
+        }
         
         texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
         

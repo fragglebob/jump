@@ -89,10 +89,18 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
         app.grid->setRows(value);
     });
 
-    of.set_function("fx_kale", [&app](float value) {
-        app.kaleido->enable();
-        app.kaleido->setSegments(value);
-    });
+    of.set_function("fx_kale", sol::overload(
+        [&app](float value) {
+            app.kaleido->enable();
+            app.kaleido->setSegments(value);
+            app.kaleido->setTime(true);
+        },
+        [&app](float value, bool time) {
+            app.kaleido->enable();
+            app.kaleido->setSegments(value);
+            app.kaleido->setTime(time);
+        }
+    ));
 
     of.set_function("fx_wave", [&app](float value) {
         app.wave->enable();
