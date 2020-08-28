@@ -1,63 +1,39 @@
 function draw()
 
-    -- of.fx_kale(of.lerp(1, 10, of.slider(1)), false)
-    of.fx_grid(of.int_bar() % 4 + 1)
-
-    -- of.fx_wave(12)
 
     of.blend_mode("add")
-    -- of.line_width(of.fft(1) * 6 + 1)
 
-    -- of.rotate(of.frame() / 10, 0.7, 0.2, 0.4)
-    
-    -- of.scale(0.2)
-
-    of.color(200, 20, 100)
-
-    local c = 200
-    local hc = c / 2;
 
     
 
-    -- 
+    of.rotateY(of.bar() * 45)
 
-    local c = 1000
+    -- of.scale(math.pow((math.sin((math.pi * 1) * (of.bar())) + 1) / 2, 4) + 1.2)
 
-    local l = of.fft(0) * 500 + 100;
-    local w = of.fft(4) * 30 + 10
-
-    for i = c,1,-1 
+    for i = 2000,1,-1 
     do 
         of.pushMatrix()
 
-
-        local temp1 = i*(of.knob(1)/10+1) + (of.frame()*of.knob(2)/10);
-        local z = ((temp1 - math.floor(temp1)) * 2 - 1)
-        -- local z = math.sin(i*(of.knob(1)+1) + (of.frame()*of.knob(2)/10));
-
-        local apt = (z + 1) / 2;
-
-
-        of.hsl(
-            i/15+of.frame()/10, 
-            math.min(math.max(of.fft(1), 0.6), 1), 
-            math.max(math.cos((math.pi * 2) * (of.beat()/2 + of.slider(0) - apt)), 0.03)
-        )
-
         of.translate(
-            (math.sin(i) * 500 * apt + 1) + math.sin((math.pi * 2) * apt + of.frame() / 77)  * 400 * (1-apt), 
-            math.cos(i) * 500 * apt + 1 + math.cos((math.pi * 2) * apt + of.frame() / 100)  * 500  * (1-apt), 
-            -3000 + z * 4000
+            math.sin(i * i * 0.4 + of.time() / 100000) * 1000,
+            math.cos(i * 0.2 + of.time() / 100000) * 1000, 
+            math.cos(i * 0.9 * i + of.time() / 50000) * 1000
         )
+        of.rotate(of.frame() + i, 0.1, 0.8, 0.3)
 
-        of.scale(math.max(apt, 0.35));
-        -- of.rotateX(of.frame())
+        if i % 4 == of.int_beat() then
+            of.color(220, 40, 0)
+            of.box(50 + of.fft(i % 10 + 1) * 50)
+        else
+            of.color(220, 0, 15)
+            of.box(10 + of.fft(i % 10 + 1) * 50)
+        end
 
+        
 
-        of.box(w, w, l)
-        -- of.ball(w)
         of.popMatrix()
     end
+
 
 
 
