@@ -3,7 +3,6 @@
 
 #pragma once
 
-
 #include "ofMain.h"
 #include "ofxBeat.h"
 #include "MidiMix.h"
@@ -12,10 +11,17 @@
 #include "SliceWavePass.h"
 #include "MyKidoPass.h"
 #include "ofSol.h"
+#include "Gist.h"
+#include "BeatDetektor.h"
 
 class ofApp : public ofBaseApp {
 
 	public:
+
+		ofApp() : gist(1024, 44100), ofBaseApp()
+		{
+
+		};
 
 		sol::state lua;
 		ofSol solHelper;
@@ -28,6 +34,22 @@ class ofApp : public ofBaseApp {
         ofSoundStream soundStream;
 
 		MidiMix midiMix;
+
+		Gist<float> gist;
+
+		float gist_rms;
+		float gist_peak;
+		float gist_zcr;
+
+		float gist_spec_cent;
+		float gist_spec_crest;
+		float gist_spec_flat;
+		float gist_spec_rolloff;
+		float gist_spec_kurtosis;
+
+		std::vector<float> gist_mel_spec;
+
+		BeatDetektor detektor;
 
 		std::time_t modTimes[10];
 		bool errors[10];

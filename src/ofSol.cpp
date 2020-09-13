@@ -79,6 +79,12 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
 
     of.set_function("fft", [&app](int pos) -> float { return app.beat.getBand(pos); });
 
+    of.set_function("rms", [&app]() -> float { return app.gist_rms; });
+    of.set_function("zcr", [&app]() -> float { return app.gist_zcr; });
+    of.set_function("peak", [&app]() -> float { return app.gist_peak; });
+
+    of.set_function("mel", [&app](int pos) -> float { return app.gist_mel_spec[pos]; });
+
     of.set_function("slider", [&app](int pos) -> float { return app.midiMix.getSlider(pos); });
     of.set_function("knob", [&app](int pos) -> float { return app.midiMix.getKnob(pos); });
 

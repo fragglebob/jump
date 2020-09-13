@@ -4,9 +4,9 @@ function draw()
     of.blend_mode("add")
 
 
-    
+    of.color(220, 0, 15)
 
-    of.rotateY(of.bar() * 45)
+    of.rotateY(of.bar()/4 * 45)
 
     -- of.scale(math.pow((math.sin((math.pi * 1) * (of.bar())) + 1) / 2, 4) + 1.2)
 
@@ -21,15 +21,15 @@ function draw()
         )
         of.rotate(of.frame() + i, 0.1, 0.8, 0.3)
 
-        if i % 4 == of.int_beat() then
-            of.color(220, 40, 0)
-            of.box(50 + of.fft(i % 10 + 1) * 50)
-        else
-            of.color(220, 0, 15)
-            of.box(10 + of.fft(i % 10 + 1) * 50)
-        end
+        -- if i % 4 == of.int_beat() then
+        --     of.color(220, 40, 0)
+        --     of.box(50 + of.rms() * 900)
+        -- else
+        --     of.color(220, 0, 15)
+        --     of.box(of.rms() * 900)
+        -- end
 
-        
+        of.box(math.log(of.mel(1) + 1)* 10)
 
         of.popMatrix()
     end

@@ -10,7 +10,8 @@ cmake_minimum_required( VERSION 3.3 )
 cmake_policy( SET CMP0057 NEW)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 17)
 
 # ========================================================
 # ===================== User Settings ====================
@@ -41,10 +42,15 @@ find_package(Lua51 REQUIRED)
 include_directories(/usr/local/include ${LUA_INCLUDE_DIR})
 set(EXTRA_LIBS asound ${LUA_LIBRARIES})
 
-set(OFX_ADDONS_ACTIVE ofxMidi ofxPostProcessing)
+set(OFX_ADDONS_ACTIVE ofxMidi ofxPostProcessing Gist kiss_fft BeatDetektor)
 
 include(cmake/ofxMidi.cmake)
 include(cmake/ofxPostProcessing.cmake)
+
+
+include(cmake/Gist.cmake)
+include(cmake/kissfft.cmake)
+include(cmake/BeatDetektor.cmake)
 
 # =========================================================================
 # ============================== OpenFrameworks ===========================

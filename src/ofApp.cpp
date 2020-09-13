@@ -28,6 +28,8 @@ void ofApp::setup(){
 
     soundStream.setup(streamSettings);
 
+
+
     ofSetupScreenPerspective(1200,1200,0,0,0);
     ofSetGlobalAmbientColor(ofColor(0, 0, 0));
     ofEnableLighting();
@@ -412,5 +414,23 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 void ofApp::audioIn(ofSoundBuffer & input) {
+
+    float t = ofGetElapsedTimef();
+
+
     beat.audioReceived(input);
+    gist.processAudioFrame(input.getBuffer());
+
+    gist_peak = gist.peakEnergy();
+    gist_rms = gist.rootMeanSquare();
+    gist_zcr = gist.zeroCrossingRate();
+
+    const std::vector<float>& melSpec = gist.getMelFrequencySpectrum();
+
+    gist_mel_spec = melSpec;
+
+    std::vector<float> magSpec = gist.getMagnitudeSpectrum();
+
+    detektor.process(t, magSpec);
+
 }
