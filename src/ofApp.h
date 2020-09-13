@@ -37,6 +37,13 @@ class ofApp : public ofBaseApp {
 		GridShiftPass::Ptr grid;
 		SliceWavePass::Ptr wave;
 
+		std::deque<float> subBandBeatTimes[FFT_SUBBANDS];
+		bool hasBeatBeenDetectedForSubband[FFT_SUBBANDS];
+
+		float beatCutoffF = 10.0f;
+
+		float bpmEstimates[FFT_SUBBANDS];
+
 		void setup();
 		void update();
 		void draw();

@@ -198,6 +198,106 @@ void ofApp::update(){
         loadScript(ofToDataPath("0.lua"));
     }
 
+    float currentTime = ofGetElapsedTimef();
+
+    std::map<float, int> tempoMap;
+
+    for (size_t subband = 0; subband < FFT_SUBBANDS; subband++)
+    {
+        std::deque<float>& beatTimes = subBandBeatTimes[subband];
+        
+        if(beat.isBeat(subband)) {
+
+            if(!hasBeatBeenDetectedForSubband[subband]) {
+                hasBeatBeenDetectedForSubband[subband] = true;
+                beatTimes.push_back(currentTime);
+            }
+
+        } else {
+            hasBeatBeenDetectedForSubband[subband] = false;
+        }
+
+        if(beatTimes.size() > 0) {
+            while ( currentTime - beatTimes.front() > beatCutoffF )
+            {
+                beatTimes.pop_front();
+                if ( beatTimes.empty() ) break;
+            }
+        }
+        
+        if(beatTimes.size() >=2) {
+            
+            for (size_t i = 0; i < beatTimes.size(); i++)
+            {
+
+                for (size_t j = i + 1; j < min(beatTimes.size(), i + 15); j++)
+                {
+                    float interval = beatTimes[j] - beatTimes[i];
+
+                    if(interval < 0.2f) {
+                        continue;
+                    }
+
+                    float theoreticalTempo = 60.f / interval;
+
+                    while (theoreticalTempo < 90.f) theoreticalTempo *= 2.f;
+                    while (theoreticalTempo > 180.f) theoreticalTempo /= 2.f;
+
+                    float roundedTempo = floor(theoreticalTempo * 10.f) / 10.f;
+
+                    if(tempoMap.find(roundedTempo) != tempoMap.end()) {
+                        tempoMap[roundedTempo] += FFT_SUBBANDS - subband;
+                    } else {
+                        tempoMap.insert(std::make_pair(roundedTempo, FFT_SUBBANDS - subband));
+                    }
+                }
+            }
+        }
+
+    }
+
+    float bestGuessBpm = 0.f;
+	int highestCount = 0;
+
+    float secondBestGuessBpm = 0.f;
+	int secondHighestCount = 0;
+
+    float thirdBestGuessBpm = 0.f;
+	int thirdHighestCount = 0;
+
+    float forthBestGuessBpm = 0.f;
+	int forthHighestCount = 0;
+
+
+    // 128.5 98.6 94.7 92.3 90 odd tempos
+
+    for (auto const& x : tempoMap)
+    {
+        if ( x.second > highestCount )
+		{
+
+            forthBestGuessBpm = thirdBestGuessBpm;
+            forthHighestCount = thirdHighestCount;
+
+            thirdBestGuessBpm = secondBestGuessBpm;
+            thirdHighestCount = secondHighestCount;
+
+            secondBestGuessBpm = bestGuessBpm;
+            secondHighestCount = highestCount;
+
+			bestGuessBpm = x.first;
+			highestCount = x.second;
+		}
+    }
+
+if((ofGetFrameNum() % 10) == 0) {
+    cout << "beats " << bestGuessBpm << "   " << highestCount
+    << "   " << secondBestGuessBpm << "   " << secondHighestCount
+    << "   " << thirdBestGuessBpm << "   " << thirdHighestCount
+    << "   " << forthBestGuessBpm << "   " << forthHighestCount << endl;
+}
+
+
     updateBeat();
 
 }

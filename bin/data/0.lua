@@ -10,7 +10,7 @@ function draw()
 
     -- of.scale(math.pow((math.sin((math.pi * 1) * (of.bar())) + 1) / 2, 4) + 1.2)
 
-    for i = 2000,1,-1 
+    for i = 200,1,-1 
     do 
         of.pushMatrix()
 
