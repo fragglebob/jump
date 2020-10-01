@@ -12,6 +12,7 @@
 #include "SliceWavePass.h"
 #include "MyKidoPass.h"
 #include "ofSol.h"
+#include "ofxAubioBeat.h"
 
 class ofApp : public ofBaseApp {
 
@@ -37,12 +38,9 @@ class ofApp : public ofBaseApp {
 		GridShiftPass::Ptr grid;
 		SliceWavePass::Ptr wave;
 
-		std::deque<float> subBandBeatTimes[FFT_SUBBANDS];
-		bool hasBeatBeenDetectedForSubband[FFT_SUBBANDS];
-
-		float beatCutoffF = 10.0f;
-
-		float bpmEstimates[FFT_SUBBANDS];
+		ofxAubioBeat aubiobeat;
+		float lastBeatTime = 0.f;
+		float lastBpm = 120.0f;
 
 		void setup();
 		void update();
@@ -71,6 +69,8 @@ class ofApp : public ofBaseApp {
 
 		void handleBpmTap(float &time);
 
+		uint64_t beatsCounted;
+
 		float currentBpm;
 		float currentBpmSetTime;
 
@@ -83,6 +83,7 @@ class ofApp : public ofBaseApp {
 		void setBpm(float bpm);
 
 		void updateBeat();
+		void beatEvent(float & time);
 		
 	private:
 

@@ -35,11 +35,23 @@ set( ${APP_NAME}_SOURCE_FILES
         src/PostPasses/MyKidoPass.cpp
         src/PostPasses/SliceWavePass.cpp
         src/PostPasses/GridShiftPass.cpp
+
+        src/ofxAubioBlock.cpp
+        src/ofxAubioBeat.cpp
         )
 
 find_package(Lua51 REQUIRED)
 include_directories(/usr/local/include ${LUA_INCLUDE_DIR})
-set(EXTRA_LIBS asound ${LUA_LIBRARIES})
+
+# find_package(aubio REQUIRED)
+# include_directories(/usr/local/include ${AUBIO_INCLUDE_DIR})
+
+set(EXTRA_LIBS 
+        asound 
+        fftw3
+        aubio
+        ${LUA_LIBRARIES}
+)
 
 set(OFX_ADDONS_ACTIVE ofxMidi ofxPostProcessing)
 
@@ -110,7 +122,7 @@ set_target_properties( of_static
         )
 
 
-target_link_libraries( ${APP_NAME} $<TARGET_FILE:of_static> ${OF_CORE_LIBS} ${OFX_ADDONS_ACTIVE} ${EXTRA_LIBS} )
+target_link_libraries( ${APP_NAME} $<TARGET_FILE:of_static> ${OF_CORE_LIBS} ${OFX_ADDONS_ACTIVE} ${EXTRA_LIBS}  )
 
 set_target_properties( ${APP_NAME}
         PROPERTIES

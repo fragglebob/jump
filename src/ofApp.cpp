@@ -9,6 +9,9 @@ void line(float x1, float y1, float x2, float y2) {
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    aubiobeat.setup();
+    ofAddListener(aubiobeat.gotBeat, this, &ofApp::beatEvent);
+
     ofSetFrameRate(60);
 
     // soundStream.printDeviceList();
@@ -72,7 +75,7 @@ void ofApp::setup(){
     cout << "setup lua complete" << endl;
 
     modTimes[0] = std::filesystem::last_write_time(ofToDataPath("0.lua"));
-    
+
 }
 
 void ofApp::handleBpmTap(float &time) {
@@ -130,7 +133,7 @@ void ofApp::updateBeat() {
 
     float diff = now - currentBpmSetTime;
 
-    float beatsElapsedSinceSet = diff / secondsPerBeat;
+    float beatsElapsedSinceSet = diff / secondsPerBeat + beatsCounted;
 
     int totalBeats = (int) beatsElapsedSinceSet;
     
@@ -140,23 +143,23 @@ void ofApp::updateBeat() {
     beatProgress = beatsElapsedSinceSet;
     barProgress = beatsElapsedSinceSet / 4.f;
 
-    // 0 1 2 3  4  5  6  7
-    // 3 6 9 12 15 18 21 24
+    // // 0 1 2 3  4  5  6  7
+    // // 3 6 9 12 15 18 21 24
 
-    for (size_t i = 0; i < 8; i++)
-    {
-        midiMix.lights[(i + 1) * 3 - 1] = false;
-    }
+    // for (size_t i = 0; i < 8; i++)
+    // {
+    //     midiMix.lights[(i + 1) * 3 - 1] = false;
+    // }
 
-    int light = currentBeat;
+    // int light = currentBeat;
 
-    if(currentBar % 2 != 0) {
-        light += 4;
-    }
+    // if(currentBar % 2 != 0) {
+    //     light += 4;
+    // }
 
-    midiMix.lights[(light + 1) * 3 - 1] = true;
+    // midiMix.lights[(light + 1) * 3 - 1] = true;
 
-    midiMix.updateLights();
+    // midiMix.updateLights();
 
 }
 
@@ -198,106 +201,6 @@ void ofApp::update(){
         loadScript(ofToDataPath("0.lua"));
     }
 
-    float currentTime = ofGetElapsedTimef();
-
-    std::map<float, int> tempoMap;
-
-    for (size_t subband = 0; subband < FFT_SUBBANDS; subband++)
-    {
-        std::deque<float>& beatTimes = subBandBeatTimes[subband];
-        
-        if(beat.isBeat(subband)) {
-
-            if(!hasBeatBeenDetectedForSubband[subband]) {
-                hasBeatBeenDetectedForSubband[subband] = true;
-                beatTimes.push_back(currentTime);
-            }
-
-        } else {
-            hasBeatBeenDetectedForSubband[subband] = false;
-        }
-
-        if(beatTimes.size() > 0) {
-            while ( currentTime - beatTimes.front() > beatCutoffF )
-            {
-                beatTimes.pop_front();
-                if ( beatTimes.empty() ) break;
-            }
-        }
-        
-        if(beatTimes.size() >=2) {
-            
-            for (size_t i = 0; i < beatTimes.size(); i++)
-            {
-
-                for (size_t j = i + 1; j < min(beatTimes.size(), i + 15); j++)
-                {
-                    float interval = beatTimes[j] - beatTimes[i];
-
-                    if(interval < 0.2f) {
-                        continue;
-                    }
-
-                    float theoreticalTempo = 60.f / interval;
-
-                    while (theoreticalTempo < 90.f) theoreticalTempo *= 2.f;
-                    while (theoreticalTempo > 180.f) theoreticalTempo /= 2.f;
-
-                    float roundedTempo = floor(theoreticalTempo * 10.f) / 10.f;
-
-                    if(tempoMap.find(roundedTempo) != tempoMap.end()) {
-                        tempoMap[roundedTempo] += FFT_SUBBANDS - subband;
-                    } else {
-                        tempoMap.insert(std::make_pair(roundedTempo, FFT_SUBBANDS - subband));
-                    }
-                }
-            }
-        }
-
-    }
-
-    float bestGuessBpm = 0.f;
-	int highestCount = 0;
-
-    float secondBestGuessBpm = 0.f;
-	int secondHighestCount = 0;
-
-    float thirdBestGuessBpm = 0.f;
-	int thirdHighestCount = 0;
-
-    float forthBestGuessBpm = 0.f;
-	int forthHighestCount = 0;
-
-
-    // 128.5 98.6 94.7 92.3 90 odd tempos
-
-    for (auto const& x : tempoMap)
-    {
-        if ( x.second > highestCount )
-		{
-
-            forthBestGuessBpm = thirdBestGuessBpm;
-            forthHighestCount = thirdHighestCount;
-
-            thirdBestGuessBpm = secondBestGuessBpm;
-            thirdHighestCount = secondHighestCount;
-
-            secondBestGuessBpm = bestGuessBpm;
-            secondHighestCount = highestCount;
-
-			bestGuessBpm = x.first;
-			highestCount = x.second;
-		}
-    }
-
-if((ofGetFrameNum() % 10) == 0) {
-    cout << "beats " << bestGuessBpm << "   " << highestCount
-    << "   " << secondBestGuessBpm << "   " << secondHighestCount
-    << "   " << thirdBestGuessBpm << "   " << thirdHighestCount
-    << "   " << forthBestGuessBpm << "   " << forthHighestCount << endl;
-}
-
-
     updateBeat();
 
 }
@@ -326,6 +229,11 @@ void ofApp::draw(){
 
     ofTranslate(midX,midY);
 
+    ofEnableLighting();
+
+    light.enable();
+    amb.enable();
+
     if(errors[0] == false) {
         sol::protected_function drawFx = lua["draw"];
         auto fxRes = drawFx();
@@ -339,11 +247,6 @@ void ofApp::draw(){
     
 
 //     ofEnableBlendMode(OF_BLENDMODE_DISABLED);
-
-//     ofEnableLighting();
-
-//     light.enable();
-//     amb.enable();
 
 //     ofSeedRandom(425624562456);
 //     std::mt19937 generator (842456224616513);
@@ -513,4 +416,10 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void ofApp::audioIn(ofSoundBuffer & input) {
     beat.audioReceived(input);
+    aubiobeat.audioIn(input);
+}
+
+void ofApp::beatEvent(float & time) {
+    setBpm(aubiobeat.bpm);
+    beatsCounted++;
 }
