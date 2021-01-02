@@ -12,6 +12,7 @@ So like this is a lua powered visuals things. Needs lots more work.
 # Required Shared Libarys
 
 * lua
+* audio - for the realtime tempo stuff
 * plus anything required by open frameworks
 
 # Building

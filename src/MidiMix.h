@@ -9,8 +9,6 @@ class MidiMix : public ofxMidiListener  {
     ofxMidiIn midiIn;
     ofxMidiOut midiOut;
 
-    ofEvent<float> onBpmTap;
-
     void setup();
     void newMidiMessage(ofxMidiMessage& eventArgs);
 

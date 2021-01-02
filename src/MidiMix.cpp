@@ -78,22 +78,7 @@ void MidiMix::newMidiMessage(ofxMidiMessage& eventArgs) {
             int knobNumber = (column * 3) + row;
             knobs[knobNumber] = eventArgs.value / 127.f;
         }
-    } else if(eventArgs.status == MIDI_NOTE_ON) {
-
-        if(eventArgs.pitch % 3 == 0) {
-            float t = ofGetElapsedTimef();
-            ofNotifyEvent(onBpmTap, t, this);
-        }
-    
-        // if(eventArgs.pitch < 27) {
-        //     lights[eventArgs.pitch-1] = !lights[eventArgs.pitch-1];
-        //     midiOut.sendNoteOn(1, eventArgs.pitch, lights[eventArgs.pitch-1] ? 0x7f : 0x00);
-        // }
-
-        // cout << "note: " << eventArgs.pitch << endl;
     }
-
-    
 }
 
 

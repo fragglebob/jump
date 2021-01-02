@@ -42,6 +42,9 @@ class ofApp : public ofBaseApp {
 		float lastBeatTime = 0.f;
 		float lastBpm = 120.0f;
 
+		ofFbo currentFrame;
+		ofFbo feedbackFrame;
+
 		void setup();
 		void update();
 		void draw();
@@ -87,9 +90,13 @@ class ofApp : public ofBaseApp {
 		
 	private:
 
-
+		void setupFeedbackLoop();
 
 		bool loadScript(std::string path);
+
+		void beginFeedback();
+		void endFeedback();
+		void drawFeedback(ofFbo& fbo, int width, int height);
 };
 
 #endif

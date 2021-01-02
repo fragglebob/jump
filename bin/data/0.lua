@@ -1,3 +1,8 @@
+function setup()
+    of.enabled_feedback();
+end
+
+
 -- function draw()
 
  
