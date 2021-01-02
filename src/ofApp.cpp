@@ -203,19 +203,29 @@ void ofApp::draw(){
     wave->disable();
     // bloom->disable();
 
-    ofBackground(255,255,255, 0);
+    ofBackground(0,0,0,255);
 
     
 
     post.begin();
 
+    ofBackground(0,0,0,255);
+
     beginFeedback();
+
+    ofBackground(0,0,0,255);
 
     ofEnableBlendMode(OF_BLENDMODE_ALPHA);
 
-    ofSetDepthTest(false);
-    drawFeedback(feedbackFrame, ofGetWidth(), ofGetHeight());
-    ofSetDepthTest(true);
+    if(feedbackEnabled) {
+        ofSetDepthTest(false);
+        drawFeedback(feedbackFrame, ofGetWidth(), ofGetHeight());
+        ofSetDepthTest(true);
+
+        feedbackEnabled = false;
+    }
+
+    ofEnableBlendMode(OF_BLENDMODE_DISABLED);
 
     ofDisableLighting();
 

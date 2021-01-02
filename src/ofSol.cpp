@@ -89,6 +89,10 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
         app.grid->setRows(value);
     });
 
+    of.set_function("feedback", [&app](bool enabled) {
+        app.setFeeback(enabled);
+    });
+
     of.set_function("fx_kale", sol::overload(
         [&app](float value) {
             app.kaleido->enable();

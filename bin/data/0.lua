@@ -1,8 +1,3 @@
-function setup()
-    of.enabled_feedback();
-end
-
-
 -- function draw()
 
  
@@ -37,12 +32,13 @@ end
 -- end
 function draw()
 
-    of.fx_kale(1)
-    of.fx_grid(4)
+    
+    of.fx_kale(2)
+    of.fx_grid(1.3)
     -- of.fx_wave(12)
 
-    if of.int_beat()  % 4 == 0 then
-        of.blend_mode("add")
+    if of.int_beat() % 4 > 0 then
+        of.feedback(true)
     end
     
   

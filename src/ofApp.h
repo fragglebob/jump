@@ -87,6 +87,10 @@ class ofApp : public ofBaseApp {
 
 		void updateBeat();
 		void beatEvent(float & time);
+
+		bool feedbackEnabled = false;
+
+		void setFeeback(bool feedback) { feedbackEnabled = feedback; }
 		
 	private:
 
