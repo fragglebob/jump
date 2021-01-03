@@ -90,7 +90,8 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
     });
 
     of.set_function("feedback", [&app](bool enabled) {
-        app.setFeeback(enabled);
+        app.feedback->enable();
+        // app.setFeeback(enabled);
     });
 
     of.set_function("fx_kale", sol::overload(

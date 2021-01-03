@@ -35,6 +35,7 @@ set( ${APP_NAME}_SOURCE_FILES
         src/PostPasses/MyKidoPass.cpp
         src/PostPasses/SliceWavePass.cpp
         src/PostPasses/GridShiftPass.cpp
+        src/PostPasses/FeedbackPass.cpp
 
         src/ofxAubioBlock.cpp
         src/ofxAubioBeat.cpp

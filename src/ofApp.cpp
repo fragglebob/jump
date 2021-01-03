@@ -50,10 +50,16 @@ void ofApp::setup(){
 
     post.init(ofGetWidth(), ofGetHeight());
     // post.createPass<RGBShiftPass>();
-    bloom = post.createPass<BloomPass>();
+
+    
+
+    // bloom = post.createPass<BloomPass>();
     kaleido = post.createPass<MyKidoPass>();
     grid = post.createPass<GridShiftPass>();
     wave = post.createPass<SliceWavePass>();
+
+
+    feedback = post.createPass<FeedbackPass>();
     
     midiMix.setup();
     
@@ -62,7 +68,7 @@ void ofApp::setup(){
     for (size_t i = 0; i < 10; i++)
     {
         modTimes[i] = 0;
-        errors[0] = 0;
+        errors[i] = 0;
     }
 
     cout << "setting up lua" << endl;
@@ -201,31 +207,36 @@ void ofApp::draw(){
     kaleido->disable();
     grid->disable();
     wave->disable();
+    feedback->disable();
     // bloom->disable();
 
+    // ofBackground(0,0,0,255);
     ofBackground(0,0,0,255);
+    ofClear(0,0,0,0);
+    // 
 
-    
+    ofEnableAlphaBlending();
 
     post.begin();
 
-    ofBackground(0,0,0,255);
+    
 
-    beginFeedback();
+    // beginFeedback();
 
-    ofBackground(0,0,0,255);
 
-    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
 
-    if(feedbackEnabled) {
-        ofSetDepthTest(false);
-        drawFeedback(feedbackFrame, ofGetWidth(), ofGetHeight());
-        ofSetDepthTest(true);
+   
 
-        feedbackEnabled = false;
-    }
+    // if(feedbackEnabled) {
+    //     ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+    //     ofSetDepthTest(false);
+    //     drawFeedback(feedbackFrame, ofGetWidth(), ofGetHeight());
+    //     ofSetDepthTest(true);
+    //     feedbackEnabled = false;
+    //     ofEnableBlendMode(OF_BLENDMODE_DISABLED);
+    // }
 
-    ofEnableBlendMode(OF_BLENDMODE_DISABLED);
+    
 
     ofDisableLighting();
 
@@ -257,7 +268,7 @@ void ofApp::draw(){
     ofPopStyle();
     ofPopMatrix();
 
-    endFeedback();
+    // endFeedback();
 
     post.end();
 
@@ -365,7 +376,7 @@ void ofApp::mouseExited(int x, int y){
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
     post.resize(w, h, false);
-    setupFeedbackLoop();
+    feedback->allocateFbo();
 }
 
 //--------------------------------------------------------------

@@ -11,6 +11,8 @@
 #include "GridShiftPass.h"
 #include "SliceWavePass.h"
 #include "MyKidoPass.h"
+#include "FeedbackPass.h"
+#include "BloomPass.h"
 #include "ofSol.h"
 #include "ofxAubioBeat.h"
 
@@ -34,9 +36,10 @@ class ofApp : public ofBaseApp {
 		bool errors[10];
 
 		MyKidoPass::Ptr kaleido;
-		BloomPass::Ptr bloom;
+		itg::BloomPass::Ptr bloom;
 		GridShiftPass::Ptr grid;
 		SliceWavePass::Ptr wave;
+		FeedbackPass::Ptr feedback;
 
 		ofxAubioBeat aubiobeat;
 		float lastBeatTime = 0.f;
