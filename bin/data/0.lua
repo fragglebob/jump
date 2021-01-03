@@ -32,14 +32,14 @@
 -- end
 function draw()
 
-    
-    of.fx_kale(2)
-    of.fx_grid(1.3)
-    -- of.fx_wave(12)
+    of.feedback(true)
+    of.fx_kale(1.2)
+    of.fx_grid(1.1)
+    of.fx_wave(6)
 
-    if of.int_beat() % 4 > 0 then
-        of.feedback(true)
-    end
+    -- if math.floor(of.frame() / 60) % 2 > 0 then
+        
+    -- end
     
   
     of.rotateX(90)
