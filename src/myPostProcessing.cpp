@@ -38,11 +38,15 @@ void myPostProcessing::init(unsigned width, unsigned height, bool arb)
         s.textureTarget = GL_TEXTURE_2D;
     }
     
+    // s.numSamples = 4;
+
     // no need to use depth for ping pongs
     for (int i = 0; i < 2; ++i)
     {
         pingPong[i].allocate(s);
     }
+
+    // s.numSamples = 0;
     
     s.useDepth = true;
     s.depthStencilInternalFormat = GL_DEPTH_COMPONENT24;

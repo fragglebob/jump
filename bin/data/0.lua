@@ -33,9 +33,9 @@
 function draw()
 
     of.feedback(true)
-    of.fx_kale(1.2)
-    of.fx_grid(1.1)
-    of.fx_wave(6)
+    of.fx_kale(4)
+    of.fx_grid(5)
+    -- of.fx_wave(6)
 
     -- if math.floor(of.frame() / 60) % 2 > 0 then
         
