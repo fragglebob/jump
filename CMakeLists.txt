@@ -54,10 +54,11 @@ set(EXTRA_LIBS
         ${LUA_LIBRARIES}
 )
 
-set(OFX_ADDONS_ACTIVE ofxMidi ofxPostProcessing)
+set(OFX_ADDONS_ACTIVE ofxMidi ofxPostProcessing ofxXmlSettings)
 
 include(cmake/ofxMidi.cmake)
 include(cmake/ofxPostProcessing.cmake)
+include(cmake/ofxXmlSettings.cmake)
 
 # =========================================================================
 # ============================== OpenFrameworks ===========================

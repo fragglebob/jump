@@ -9,12 +9,14 @@ void line(float x1, float y1, float x2, float y2) {
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    settings.loadFile("settings.xml");
+
     aubiobeat.setup();
     ofAddListener(aubiobeat.gotBeat, this, &ofApp::beatEvent);
 
     ofSetFrameRate(60);
 
-    // soundStream.printDeviceList();
+    soundStream.printDeviceList();
 
     ofEnableAntiAliasing();
     ofEnableDepthTest();
@@ -22,14 +24,19 @@ void ofApp::setup(){
 
     ofSoundStreamSettings streamSettings;
     streamSettings.numInputChannels = 1;
+    streamSettings.numOutputChannels = 2;
     streamSettings.bufferSize = beat.getBufferSize();
     streamSettings.setInListener(this);
 
-    auto devices = soundStream.getMatchingDevices("Scarlett 2i4 USB");
-    if(!devices.empty()){
-        streamSettings.setInDevice(devices[0]);
-    }
+    string audioInDeviceName = settings.getValue("settings:audioIn", "default");
 
+    if(audioInDeviceName != "default") {
+        auto devices = soundStream.getMatchingDevices(audioInDeviceName);
+        if(!devices.empty()){
+            streamSettings.setInDevice(devices[0]);
+        }
+    }
+    
     soundStream.setup(streamSettings);
 
     ofSetupScreenPerspective(1200,1200,0,0,0);
@@ -51,7 +58,7 @@ void ofApp::setup(){
     post.init(ofGetWidth(), ofGetHeight());
     // post.createPass<RGBShiftPass>();
 
-    
+    feedback = post.createPass<FeedbackPass>();
 
     // bloom = post.createPass<BloomPass>();
     kaleido = post.createPass<MyKidoPass>();
@@ -59,7 +66,7 @@ void ofApp::setup(){
     wave = post.createPass<SliceWavePass>();
 
 
-    feedback = post.createPass<FeedbackPass>();
+    
     
     midiMix.setup();
     

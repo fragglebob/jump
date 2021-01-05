@@ -15,6 +15,7 @@
 #include "BloomPass.h"
 #include "ofSol.h"
 #include "ofxAubioBeat.h"
+#include "ofxXmlSettings.h"
 
 class ofApp : public ofBaseApp {
 
@@ -94,6 +95,8 @@ class ofApp : public ofBaseApp {
 		bool feedbackEnabled = false;
 
 		void setFeeback(bool feedback) { feedbackEnabled = feedback; }
+
+		ofxXmlSettings settings;
 		
 	private:
 

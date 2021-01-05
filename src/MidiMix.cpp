@@ -28,7 +28,7 @@ std::vector<std::string> findPortByName(string name, ofxMidiOut midiOut) {
 }
 
 void MidiMix::setup() {
-    midiIn.listInPorts();
+    // midiIn.listInPorts();
     std::vector<std::string> inPortList = findPortByName("MIDI Mix", midiIn);
     std::vector<std::string> outPortList = findPortByName("MIDI Mix", midiOut);
 
