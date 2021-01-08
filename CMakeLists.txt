@@ -35,6 +35,7 @@ set( ${APP_NAME}_SOURCE_FILES
         src/PostPasses/MyKidoPass.cpp
         src/PostPasses/SliceWavePass.cpp
         src/PostPasses/GridShiftPass.cpp
+        src/PostPasses/FeedbackPass.cpp
 
         src/ofxAubioBlock.cpp
         src/ofxAubioBeat.cpp
@@ -53,10 +54,11 @@ set(EXTRA_LIBS
         ${LUA_LIBRARIES}
 )
 
-set(OFX_ADDONS_ACTIVE ofxMidi ofxPostProcessing)
+set(OFX_ADDONS_ACTIVE ofxMidi ofxPostProcessing ofxXmlSettings)
 
 include(cmake/ofxMidi.cmake)
 include(cmake/ofxPostProcessing.cmake)
+include(cmake/ofxXmlSettings.cmake)
 
 # =========================================================================
 # ============================== OpenFrameworks ===========================

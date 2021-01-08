@@ -9,12 +9,14 @@ void line(float x1, float y1, float x2, float y2) {
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    settings.loadFile("settings.xml");
+
     aubiobeat.setup();
     ofAddListener(aubiobeat.gotBeat, this, &ofApp::beatEvent);
 
     ofSetFrameRate(60);
 
-    // soundStream.printDeviceList();
+    soundStream.printDeviceList();
 
     ofEnableAntiAliasing();
     ofEnableDepthTest();
@@ -22,14 +24,19 @@ void ofApp::setup(){
 
     ofSoundStreamSettings streamSettings;
     streamSettings.numInputChannels = 1;
+    streamSettings.numOutputChannels = 2;
     streamSettings.bufferSize = beat.getBufferSize();
     streamSettings.setInListener(this);
 
-    auto devices = soundStream.getMatchingDevices("Scarlett 2i4 USB");
-    if(!devices.empty()){
-        streamSettings.setInDevice(devices[0]);
-    }
+    string audioInDeviceName = settings.getValue("settings:audioIn", "default");
 
+    if(audioInDeviceName != "default") {
+        auto devices = soundStream.getMatchingDevices(audioInDeviceName);
+        if(!devices.empty()){
+            streamSettings.setInDevice(devices[0]);
+        }
+    }
+    
     soundStream.setup(streamSettings);
 
     ofSetupScreenPerspective(1200,1200,0,0,0);
@@ -50,10 +57,16 @@ void ofApp::setup(){
 
     post.init(ofGetWidth(), ofGetHeight());
     // post.createPass<RGBShiftPass>();
-    bloom = post.createPass<BloomPass>();
+
+    feedback = post.createPass<FeedbackPass>();
+
+    // bloom = post.createPass<BloomPass>();
     kaleido = post.createPass<MyKidoPass>();
     grid = post.createPass<GridShiftPass>();
     wave = post.createPass<SliceWavePass>();
+
+
+    
     
     midiMix.setup();
     
@@ -62,7 +75,7 @@ void ofApp::setup(){
     for (size_t i = 0; i < 10; i++)
     {
         modTimes[i] = 0;
-        errors[0] = 0;
+        errors[i] = 0;
     }
 
     cout << "setting up lua" << endl;
@@ -201,31 +214,36 @@ void ofApp::draw(){
     kaleido->disable();
     grid->disable();
     wave->disable();
+    feedback->disable();
     // bloom->disable();
 
+    // ofBackground(0,0,0,255);
     ofBackground(0,0,0,255);
+    ofClear(0,0,0,0);
+    // 
 
-    
+    ofEnableAlphaBlending();
 
     post.begin();
 
-    ofBackground(0,0,0,255);
+    
 
-    beginFeedback();
+    // beginFeedback();
 
-    ofBackground(0,0,0,255);
 
-    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
 
-    if(feedbackEnabled) {
-        ofSetDepthTest(false);
-        drawFeedback(feedbackFrame, ofGetWidth(), ofGetHeight());
-        ofSetDepthTest(true);
+   
 
-        feedbackEnabled = false;
-    }
+    // if(feedbackEnabled) {
+    //     ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+    //     ofSetDepthTest(false);
+    //     drawFeedback(feedbackFrame, ofGetWidth(), ofGetHeight());
+    //     ofSetDepthTest(true);
+    //     feedbackEnabled = false;
+    //     ofEnableBlendMode(OF_BLENDMODE_DISABLED);
+    // }
 
-    ofEnableBlendMode(OF_BLENDMODE_DISABLED);
+    
 
     ofDisableLighting();
 
@@ -257,7 +275,7 @@ void ofApp::draw(){
     ofPopStyle();
     ofPopMatrix();
 
-    endFeedback();
+    // endFeedback();
 
     post.end();
 
@@ -365,7 +383,7 @@ void ofApp::mouseExited(int x, int y){
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
     post.resize(w, h, false);
-    setupFeedbackLoop();
+    feedback->allocateFbo();
 }
 
 //--------------------------------------------------------------
