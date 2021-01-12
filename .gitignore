@@ -4,7 +4,7 @@ bin/ofApp
 build/
 CMakeFiles/
 obj/
-
+jump.zip
 CMakeCache.txt
 compile_commands.json
 Makefile

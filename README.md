@@ -6,8 +6,13 @@ It some fft and tempo matching fun built in.
 
 # Required Shared Libaries
 
-* lua
+* lua5.1
 * audio - for the realtime tempo stuff
+* asound
+* gstreamer
+* boost_filesystem
+* boost_system
+* rtaudio
 * plus anything required by open frameworks
 
 # Running
