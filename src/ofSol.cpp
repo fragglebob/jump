@@ -85,30 +85,30 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
     of.set_function("lerp", [](float min, float max, float amt) -> float { return ofLerp(min, max, amt); });
 
     of.set_function("fx_grid", [&app](float value) {
-        app.grid->enable();
+        app.post.enablePass(app.grid);
         app.grid->setRows(value);
     });
 
     of.set_function("feedback", [&app](bool enabled) {
-        app.feedback->enable();
+        app.post.enablePass(app.feedback);
         // app.setFeeback(enabled);
     });
 
     of.set_function("fx_kale", sol::overload(
         [&app](float value) {
-            app.kaleido->enable();
+            app.post.enablePass(app.kaleido);
             app.kaleido->setSegments(value);
             app.kaleido->setTime(true);
         },
         [&app](float value, bool time) {
-            app.kaleido->enable();
+            app.post.enablePass(app.kaleido);
             app.kaleido->setSegments(value);
             app.kaleido->setTime(time);
         }
     ));
 
     of.set_function("fx_wave", [&app](float value) {
-        app.wave->enable();
+        app.post.enablePass(app.wave);
         app.wave->setSegments(value);
     });
 

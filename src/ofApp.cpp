@@ -58,15 +58,13 @@ void ofApp::setup(){
     post.init(ofGetWidth(), ofGetHeight());
     // post.createPass<RGBShiftPass>();
 
-    feedback = post.createPass<FeedbackPass>();
+    
 
     // bloom = post.createPass<BloomPass>();
     kaleido = post.createPass<MyKidoPass>();
     grid = post.createPass<GridShiftPass>();
     wave = post.createPass<SliceWavePass>();
-
-
-    
+    feedback = post.createPass<FeedbackPass>();
     
     midiMix.setup();
     
@@ -211,10 +209,10 @@ void ofApp::update(){
 void ofApp::draw(){
 
     // disable fx for code to enabled later
-    kaleido->disable();
-    grid->disable();
-    wave->disable();
-    feedback->disable();
+    // kaleido->disable();
+    // grid->disable();
+    // wave->disable();
+    // feedback->disable();
     // bloom->disable();
 
     // ofBackground(0,0,0,255);

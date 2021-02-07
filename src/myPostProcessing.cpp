@@ -129,6 +129,8 @@ void myPostProcessing::end(bool autoDraw)
     {
         cleanFbo(pingPong[i]);
     }
+
+    clearEnabled();
 }
 
 void myPostProcessing::debugDraw()
@@ -168,23 +170,23 @@ ofTexture& myPostProcessing::getProcessedTextureReference()
 void myPostProcessing::process(ofFbo& raw, bool hasDepthAsTexture)
 {
     numProcessedPasses = 0;
-    for (int i = 0; i < passes.size(); ++i)
+    for (int i = 0; i < enabledPasses.size(); ++i)
     {
-        if (passes[i]->getEnabled())
+        if (enabledPasses[i]->getEnabled())
         {
-            if (arb && !passes[i]->hasArbShader()) ofLogError() << "Arb mode is enabled but pass " << passes[i]->getName() << " does not have an arb shader.";
+            if (arb && !enabledPasses[i]->hasArbShader()) ofLogError() << "Arb mode is enabled but pass " << enabledPasses[i]->getName() << " does not have an arb shader.";
             else
             {
                 cleanFbo(pingPong[1 - currentReadFbo]);
                 if (hasDepthAsTexture)
                 {
-                    if (numProcessedPasses == 0) passes[i]->render(raw, pingPong[1 - currentReadFbo], raw.getDepthTexture());
-                    else passes[i]->render(pingPong[currentReadFbo], pingPong[1 - currentReadFbo], raw.getDepthTexture());
+                    if (numProcessedPasses == 0) enabledPasses[i]->render(raw, pingPong[1 - currentReadFbo], raw.getDepthTexture());
+                    else enabledPasses[i]->render(pingPong[currentReadFbo], pingPong[1 - currentReadFbo], raw.getDepthTexture());
                 }
                 else
                 {
-                    if (numProcessedPasses == 0) passes[i]->render(raw, pingPong[1 - currentReadFbo]);
-                    else passes[i]->render(pingPong[currentReadFbo], pingPong[1 - currentReadFbo]);
+                    if (numProcessedPasses == 0) enabledPasses[i]->render(raw, pingPong[1 - currentReadFbo]);
+                    else enabledPasses[i]->render(pingPong[currentReadFbo], pingPong[1 - currentReadFbo]);
                 }
                 currentReadFbo = 1 - currentReadFbo;
                 numProcessedPasses++;
@@ -203,7 +205,7 @@ void myPostProcessing::resize(unsigned width, unsigned height, bool arb) {
 
     auto passes = getPasses();
 
-    for(auto const& value: passes) {
+    for(const auto& [key, value]: passes) {
         value->setAspect(ofVec2f(width, height));
     }
 }
