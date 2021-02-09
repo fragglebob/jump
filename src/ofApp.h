@@ -13,6 +13,7 @@
 #include "MyKidoPass.h"
 #include "FeedbackPass.h"
 #include "BloomPass.h"
+#include "RGBShiftPass.h"
 #include "ofSol.h"
 #include "ofxAubioBeat.h"
 #include "ofxXmlSettings.h"
@@ -38,6 +39,7 @@ class ofApp : public ofBaseApp {
 
 		MyKidoPass::Ptr kaleido;
 		itg::BloomPass::Ptr bloom;
+		itg::RGBShiftPass::Ptr rgbshift;
 		GridShiftPass::Ptr grid;
 		SliceWavePass::Ptr wave;
 		FeedbackPass::Ptr feedback;

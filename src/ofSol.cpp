@@ -91,7 +91,6 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
 
     of.set_function("feedback", [&app](bool enabled) {
         app.post.enablePass(app.feedback);
-        // app.setFeeback(enabled);
     });
 
     of.set_function("fx_kale", sol::overload(
@@ -110,6 +109,15 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
     of.set_function("fx_wave", [&app](float value) {
         app.post.enablePass(app.wave);
         app.wave->setSegments(value);
+    });
+
+    of.set_function("fx_rgb", [&app](float value) {
+        app.post.enablePass(app.rgbshift);
+        app.rgbshift->setAmount(value);
+    });
+
+    of.set_function("fx_bloom", [&app]() {
+        app.post.enablePass(app.bloom);
     });
 
     of.set_function("beat", [&app]() {
