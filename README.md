@@ -98,6 +98,8 @@ of.fx_wave(segments)
 of.fx_kale(segments)
 of.fx_kale(segments, time)
 of.fx_grid(gridSize)
+of.fx_rgb(amount)
+of.fx_bloom()
 
 of.feedback()
 
@@ -111,7 +113,7 @@ of.color(grey) // 0 - 255
 
 of.hsl(h, s, l)
 
-of.blend_mode(blendMode) // add, alpha, multiply, screen, off
+of.blend_mode(blendMode) // "add", "alpha", "multiply", "screen", "off"
 
 // transforms
 
