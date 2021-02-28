@@ -1,8 +1,9 @@
 #include "GridShiftPass.h"
 #include "ofMain.h"
+#include "myPostProcessing.h"
 
-GridShiftPass::GridShiftPass(const ofVec2f& aspect, bool arb, float rows) :
-        rows(rows), RenderPass(aspect, arb, "GridShift")
+GridShiftPass::GridShiftPass(myPostProcessing* processor, const ofVec2f& aspect, bool arb, float rows) :
+        rows(rows), RenderPass(processor, aspect, arb, "GridShift")
     {
         
         string fragShaderSrc = STRINGIFY(
@@ -42,7 +43,7 @@ GridShiftPass::GridShiftPass(const ofVec2f& aspect, bool arb, float rows) :
     }
     
 
-    void GridShiftPass::render(ofFbo& readFbo, ofFbo& writeFbo, ofTexture& depthTex)
+    void GridShiftPass::render(ofFbo& readFbo, ofFbo& writeFbo)
     {
         writeFbo.begin();
         
@@ -58,3 +59,11 @@ GridShiftPass::GridShiftPass(const ofVec2f& aspect, bool arb, float rows) :
         shader.end();
         writeFbo.end();
     }
+
+void GridShiftPass::enablePass(float rows)
+{
+    processor->addPass([this, rows](ofFbo& readFbo, ofFbo& writeFbo) {
+        this->setRows(rows);
+        this->render(readFbo, writeFbo);
+    });
+}

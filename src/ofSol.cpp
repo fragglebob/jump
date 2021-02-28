@@ -85,39 +85,32 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
     of.set_function("lerp", [](float min, float max, float amt) -> float { return ofLerp(min, max, amt); });
 
     of.set_function("fx_grid", [&app](float value) {
-        app.post.enablePass(app.grid);
-        app.grid->setRows(value);
+        app.grid->enablePass(value);
     });
 
     of.set_function("feedback", [&app](bool enabled) {
-        app.post.enablePass(app.feedback);
+        app.feedback->enablePass();
     });
 
     of.set_function("fx_kale", sol::overload(
         [&app](float value) {
-            app.post.enablePass(app.kaleido);
-            app.kaleido->setSegments(value);
-            app.kaleido->setTime(true);
+            app.kaleido->enablePass(value);
         },
-        [&app](float value, bool time) {
-            app.post.enablePass(app.kaleido);
-            app.kaleido->setSegments(value);
-            app.kaleido->setTime(time);
+        [&app](float value, float time) {
+            app.kaleido->enablePass(value, time);
         }
     ));
 
     of.set_function("fx_wave", [&app](float value) {
-        app.post.enablePass(app.wave);
-        app.wave->setSegments(value);
+        app.wave->enablePass(value);
     });
 
     of.set_function("fx_rgb", [&app](float value) {
-        app.post.enablePass(app.rgbshift);
-        app.rgbshift->setAmount(value);
+        app.rgbshift->enablePass(value);
     });
 
     of.set_function("fx_bloom", [&app]() {
-        app.post.enablePass(app.bloom);
+        app.bloom->enablePass();
     });
 
     of.set_function("beat", [&app]() {

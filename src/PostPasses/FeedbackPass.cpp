@@ -1,8 +1,9 @@
 #include "FeedbackPass.h"
 #include "ofMain.h"
+#include "myPostProcessing.h"
 
-FeedbackPass::FeedbackPass(const ofVec2f& aspect, bool arb) :
-         RenderPass(aspect, arb, "Feedback")
+FeedbackPass::FeedbackPass(myPostProcessing* processor, const ofVec2f& aspect, bool arb) :
+         RenderPass(processor, aspect, arb, "Feedback")
 {
     
     this->allocateFbo();
@@ -27,64 +28,32 @@ void FeedbackPass::allocateFbo()
 
 void FeedbackPass::render(ofFbo& readFbo, ofFbo& writeFbo)
 {
-
-
-
     writeFbo.begin();
+        ofClear(0,0,0,255);
 
-    ofClear(0,0,0,255);
-
-        // 
         ofEnableBlendMode(OF_BLENDMODE_ALPHA);
         ofSetDepthTest(false);
         feedbackFbo.draw(0,0, feedbackFbo.getWidth(), feedbackFbo.getHeight());
         ofSetDepthTest(true);
         ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-        // ofEnableBlendMode(OF_BLENDMODE_DISABLED);
-
-            readFbo.draw(0,0, readFbo.getWidth(), readFbo.getHeight());
-
-
-            // feedbackFbo.draw(0,0, 500, 500);
-
-
+    
+        readFbo.draw(0,0, readFbo.getWidth(), readFbo.getHeight());
     writeFbo.end();
 
 
-
-
-
-
-
-
-
     feedbackFbo.begin();
-
-    // ofClear(0,0,0,0);
-// ofSetDepthTest(false);
-//     ofEnableBlendMode(OF_BLENDMODE_DISABLED);
-
-//     ofPushStyle();
-//     glPushAttrib(GL_ENABLE_BIT);
-//     glDisable(GL_LIGHTING);
-//     ofSetColor(255, 255, 255);
-ofSetDepthTest(false);
-glEnable(GL_BLEND);
-glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-// ofEnableBlendMode(OF_BLENDMODE_DISABLED);
-    readFbo.draw(0,0, readFbo.getWidth(), readFbo.getHeight());
-    // ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-//     glPopAttrib();
-//     ofPopStyle();
-ofSetDepthTest(true);
+        ofSetDepthTest(false);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        readFbo.draw(0,0, readFbo.getWidth(), readFbo.getHeight());
+        ofSetDepthTest(true);
     feedbackFbo.end();
+}
 
 
-
-
-
-
-
-
-    
+void FeedbackPass::enablePass()
+{
+    processor->addPass([this](ofFbo& readFbo, ofFbo& writeFbo) {
+        this->render(readFbo, writeFbo);
+    });
 }

@@ -56,9 +56,9 @@ void ofApp::setup(){
     amb.setAmbientColor(ofColor(50.0, 50.0, 50.0, 50.0));
 
     post.init(ofGetWidth(), ofGetHeight());
-    
-    rgbshift = post.createPass<itg::RGBShiftPass>();
-    bloom = post.createPass<itg::BloomPass>();
+
+    rgbshift = post.createPass<RGBShiftPass>();
+    bloom = post.createPass<BloomPass>();
     kaleido = post.createPass<MyKidoPass>();
     grid = post.createPass<GridShiftPass>();
     wave = post.createPass<SliceWavePass>();

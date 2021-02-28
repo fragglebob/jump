@@ -172,26 +172,15 @@ void myPostProcessing::process(ofFbo& raw, bool hasDepthAsTexture)
     numProcessedPasses = 0;
     for (int i = 0; i < enabledPasses.size(); ++i)
     {
-        if (enabledPasses[i]->getEnabled())
-        {
-            if (arb && !enabledPasses[i]->hasArbShader()) ofLogError() << "Arb mode is enabled but pass " << enabledPasses[i]->getName() << " does not have an arb shader.";
-            else
-            {
-                cleanFbo(pingPong[1 - currentReadFbo]);
-                if (hasDepthAsTexture)
-                {
-                    if (numProcessedPasses == 0) enabledPasses[i]->render(raw, pingPong[1 - currentReadFbo], raw.getDepthTexture());
-                    else enabledPasses[i]->render(pingPong[currentReadFbo], pingPong[1 - currentReadFbo], raw.getDepthTexture());
-                }
-                else
-                {
-                    if (numProcessedPasses == 0) enabledPasses[i]->render(raw, pingPong[1 - currentReadFbo]);
-                    else enabledPasses[i]->render(pingPong[currentReadFbo], pingPong[1 - currentReadFbo]);
-                }
-                currentReadFbo = 1 - currentReadFbo;
-                numProcessedPasses++;
-            }
+        cleanFbo(pingPong[1 - currentReadFbo]);
+        if (numProcessedPasses == 0) {
+            enabledPasses[i](raw, pingPong[1 - currentReadFbo]);
+        } else {
+            enabledPasses[i](pingPong[currentReadFbo], pingPong[1 - currentReadFbo]);
         }
+        
+        currentReadFbo = 1 - currentReadFbo;
+        numProcessedPasses++;
     }
 }
 

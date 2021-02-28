@@ -3,17 +3,19 @@
 #include "RenderPass.h"
 #include "ofShader.h"
 
-class GridShiftPass : public itg::RenderPass {
+class GridShiftPass : public RenderPass {
 public:
     
     typedef shared_ptr<GridShiftPass> Ptr;
     
-    GridShiftPass(const ofVec2f& aspect, bool arb, float rows = 8.0f);
+    GridShiftPass(myPostProcessing* processor, const ofVec2f& aspect, bool arb, float rows = 8.0f);
     
-    void render(ofFbo& readFbo, ofFbo& writeFbo, ofTexture& depth);
+    void render(ofFbo& readFbo, ofFbo& writeFbo);
     
     float getRows(){ return rows; }
     void setRows(float v) { rows = v; }
+
+    void enablePass(float rows);
     
 private:
     

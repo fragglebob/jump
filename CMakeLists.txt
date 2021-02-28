@@ -24,18 +24,32 @@ set( OF_DIRECTORY_BY_USER "../../../of" )
 get_filename_component( OF_DIRECTORY_ABSOLUTE ${OF_DIRECTORY_BY_USER} ABSOLUTE)
 
 # --------------------- Source Files ---------------------
+
+
+include_directories(
+        "src"
+        "src/PostPasses"
+)
+
 set( ${APP_NAME}_SOURCE_FILES
         src/main.cpp
         src/ofxBeat.cpp
         src/fft.cpp
         src/ofApp.cpp
         src/ofSol.cpp
+
+        src/PostPasses/RenderPass.cpp
+
         src/myPostProcessing.cpp
         src/MidiMix.cpp
+
+        src/PostPasses/RGBShiftPass.cpp
         src/PostPasses/MyKidoPass.cpp
         src/PostPasses/SliceWavePass.cpp
         src/PostPasses/GridShiftPass.cpp
         src/PostPasses/FeedbackPass.cpp
+        src/PostPasses/ConvolutionPass.cpp
+        src/PostPasses/BloomPass.cpp
 
         src/ofxAubioBlock.cpp
         src/ofxAubioBeat.cpp
@@ -54,10 +68,9 @@ set(EXTRA_LIBS
         ${LUA_LIBRARIES}
 )
 
-set(OFX_ADDONS_ACTIVE ofxMidi ofxPostProcessing ofxXmlSettings)
+set(OFX_ADDONS_ACTIVE ofxMidi ofxXmlSettings)
 
 include(cmake/ofxMidi.cmake)
-include(cmake/ofxPostProcessing.cmake)
 include(cmake/ofxXmlSettings.cmake)
 
 # =========================================================================

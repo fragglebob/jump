@@ -1,8 +1,9 @@
 #include "SliceWavePass.h"
 #include "ofMain.h"
+#include "myPostProcessing.h"
 
-SliceWavePass::SliceWavePass(const ofVec2f& aspect, bool arb, float segments) :
-        segments(segments), RenderPass(aspect, arb, "SliceWave")
+SliceWavePass::SliceWavePass(myPostProcessing* processor, const ofVec2f& aspect, bool arb, float segments) :
+        segments(segments), RenderPass(processor, aspect, arb, "SliceWave")
     {
         
         string fragShaderSrc = STRINGIFY(
@@ -41,7 +42,7 @@ SliceWavePass::SliceWavePass(const ofVec2f& aspect, bool arb, float segments) :
     }
     
 
-    void SliceWavePass::render(ofFbo& readFbo, ofFbo& writeFbo, ofTexture& depthTex)
+    void SliceWavePass::render(ofFbo& readFbo, ofFbo& writeFbo)
     {
         writeFbo.begin();
         
@@ -57,3 +58,11 @@ SliceWavePass::SliceWavePass(const ofVec2f& aspect, bool arb, float segments) :
         shader.end();
         writeFbo.end();
     }
+
+void SliceWavePass::enablePass(float segments)
+{
+    processor->addPass([this, segments](ofFbo& readFbo, ofFbo& writeFbo) {
+        this->setSegments(segments);
+        this->render(readFbo, writeFbo);
+    });
+}

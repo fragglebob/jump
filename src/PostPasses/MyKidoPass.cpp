@@ -23,12 +23,11 @@
 
 #include "MyKidoPass.h"
 #include "ofMain.h"
+#include "myPostProcessing.h"
 
-MyKidoPass::MyKidoPass(const ofVec2f& aspect, bool arb, float segments) :
-        segments(segments), RenderPass(aspect, arb, "MyKido")
+MyKidoPass::MyKidoPass(myPostProcessing* processor, const ofVec2f& aspect, bool arb, float segments) :
+        segments(segments), RenderPass(processor, aspect, arb, "MyKido")
     {
-        
-        timePass = true;
 
         string fragShaderSrc = STRINGIFY(
 
@@ -80,7 +79,7 @@ MyKidoPass::MyKidoPass(const ofVec2f& aspect, bool arb, float segments) :
     }
     
 
-    void MyKidoPass::render(ofFbo& readFbo, ofFbo& writeFbo, ofTexture& depthTex)
+    void MyKidoPass::render(ofFbo& readFbo, ofFbo& writeFbo)
     {
         writeFbo.begin();
         
@@ -90,16 +89,25 @@ MyKidoPass::MyKidoPass(const ofVec2f& aspect, bool arb, float segments) :
         shader.setUniform1f("_Offset", 0.0f);
         shader.setUniform1f("_Divisor", PI * 2 / max(segments, 1.0f));
 
-        if(timePass) {
-            shader.setUniform1f("_Roll", ofGetElapsedTimef() / 10.0f);
-            shader.setUniform1f("iTime", ofGetElapsedTimef());
-        } else {
-            shader.setUniform1f("_Roll", 0.0f);
-            shader.setUniform1f("iTime", 0.0f);
-        }
+        shader.setUniform1f("_Roll", time / 10.0f);
+        shader.setUniform1f("iTime", time);
         
         texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
         
         shader.end();
         writeFbo.end();
+    }
+
+    void MyKidoPass::enablePass(float segments, float time)
+    {
+        processor->addPass([this, segments, time](ofFbo& readFbo, ofFbo& writeFbo) {
+            this->setTime(time);
+            this->setSegments(segments);
+            this->render(readFbo, writeFbo);
+        });
+    }
+
+    void MyKidoPass::enablePass(float segments)
+    { 
+        enablePass(segments, ofGetElapsedTimef());
     }

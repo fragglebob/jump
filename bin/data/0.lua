@@ -1,52 +1,44 @@
 
 function draw()
 
-    
-    
-    
-    of.fx_kale(2)
-    -- of.feedback(true);
-    of.fx_kale(1)
-    -- of.feedback(true);
-   
-    -- of.feedback(true);
-    
-    
--- 
-    -- of.feedback(true);
-    of.fx_wave(9);
-    
-    of.feedback(true);
     -- 
+of.feedback(true);
+of.fx_wave(8);
+    of.fx_kale(2, -0.1)
    
-    of.fx_kale(2)
+    -- of.fx_grid(3)
     of.feedback(true);
+    -- of.fx_wave(4);
+   
+    
+    -- 
+    -- of.feedback(true);
+     
+    -- -- 
 
+    of.fx_kale(2,0)
+    of.fx_grid((math.floor(of.beat()/4)%2)*2+1)
+    of.fx_kale(1,0)
     
     -- 
-    
-    of.fx_rgb(0.002)
-    of.fx_grid(4)
-    of.fx_kale(0.9)
     -- 
+    -- of.feedback(true);
+    -- 
+    -- of.fx_kale(4)
+    -- of.fx_rgb(0.001)
+    -- of.fx_grid(1.3)
+
     of.fx_bloom()
-    -- of.fx_rgb(0.002)
-
---    of.feedback(true);
-    
-    -- of.fx_grid(1.1)
-
+    of.fx_rgb(0.001)
     -- of.feedback(true);
 
-    -- of.feedback(true);
-    -- of.rotate(of.frame(), 0.5, 0.2, 0.1337)
 
     
-    of.hsl(of.int_beat() * 60 + of.frame(), 0.3, 0.3 )
+    of.hsl(of.int_beat() * 60 + of.frame(), math.floor(of.beat())%2, 0.09 )
 
     of.blend_mode("add")
 
-    local times = 50;
+    local times = 1000;
 
     local b = of.beat()
 
@@ -63,7 +55,7 @@ function draw()
             math.sin(i*1.637) * sizeMulitpler
     )
     of.rotate(i+of.frame(), 12.3, 2.3, 5)
-        of.box(of.fft(6) * 90)
+        of.box(of.fft(1) * 90)
         of.popMatrix()
     end
 

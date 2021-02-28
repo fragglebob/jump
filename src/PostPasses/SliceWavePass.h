@@ -3,17 +3,19 @@
 #include "RenderPass.h"
 #include "ofShader.h"
 
-class SliceWavePass : public itg::RenderPass {
+class SliceWavePass : public RenderPass {
 public:
     
     typedef shared_ptr<SliceWavePass> Ptr;
     
-    SliceWavePass(const ofVec2f& aspect, bool arb, float segments = 20.0f);
+    SliceWavePass(myPostProcessing* processor, const ofVec2f& aspect, bool arb, float segments = 20.0f);
     
-    void render(ofFbo& readFbo, ofFbo& writeFbo, ofTexture& depth);
+    void render(ofFbo& readFbo, ofFbo& writeFbo);
     
     float getSegments(){ return segments; }
     void setSegments(float v) { segments = v; }
+
+    void enablePass(float segments);
     
 private:
     

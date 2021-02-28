@@ -29,9 +29,9 @@ public:
     template<class T>
     shared_ptr<T> createPass()
     {
-        auto pass = new T(ofVec2f(width, height), arb);
+        shared_ptr<T> pass = make_shared<T>(this, ofVec2f(width, height), arb);
         avaliblePasses.insert(std::make_pair(pass->getName(), pass));
-        return shared_ptr<T>(pass);
+        return pass;
     }
     
     ofTexture& getProcessedTextureReference();
@@ -46,21 +46,16 @@ public:
     void setFlip(bool flip) { this->flip = flip; }
     
     unsigned size() const { return avaliblePasses.size(); }
-    itg::RenderPass::Ptr operator[](string name) const { return avaliblePasses.at(name); }
-    map<string, itg::RenderPass::Ptr>& getPasses() { return avaliblePasses; }
+    RenderPass::Ptr operator[](string name) const { return avaliblePasses.at(name); }
+    map<string, RenderPass::Ptr>& getPasses() { return avaliblePasses; }
     unsigned getNumProcessedPasses() const { return numProcessedPasses; }
     
     ofFbo& getRawRef() { return raw; }
 
     void resize(unsigned _w, unsigned _h, bool arb);
 
-    void enablePass(itg::RenderPass::Ptr pass) { enablePass(pass->getName()); }
-    
-    void enablePass(string name)
-    {
-        if(avaliblePasses.find(name) != avaliblePasses.end()) {
-            enabledPasses.push_back(avaliblePasses.at(name));
-        }
+    void addPass(std::function<void(ofFbo&, ofFbo&)> passFunc) {
+        enabledPasses.push_back(passFunc);
     }
 
     void clearEnabled() { enabledPasses.clear(); }
@@ -76,9 +71,9 @@ private:
     
     ofFbo raw;
     ofFbo pingPong[2];
-    map<string, itg::RenderPass::Ptr> avaliblePasses;
+    map<string, RenderPass::Ptr> avaliblePasses;
 
-    vector<itg::RenderPass::Ptr> enabledPasses;
+    vector<std::function<void(ofFbo&, ofFbo&)>> enabledPasses;
 };
 
 #endif //JUMP_MYPOSTPROCESSING_H

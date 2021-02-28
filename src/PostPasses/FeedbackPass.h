@@ -2,16 +2,18 @@
 
 #include "RenderPass.h"
 
-class FeedbackPass : public itg::RenderPass {
+class FeedbackPass : public RenderPass {
 public:
     
     typedef shared_ptr<FeedbackPass> Ptr;
     
-    FeedbackPass(const ofVec2f& aspect, bool arb);
+    FeedbackPass(myPostProcessing* processor, const ofVec2f& aspect, bool arb);
     
     void render(ofFbo& readFbo, ofFbo& writeFbo);
 
     void allocateFbo();
+
+    void enablePass();
     
 private:
     

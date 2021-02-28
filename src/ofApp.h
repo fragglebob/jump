@@ -38,8 +38,8 @@ class ofApp : public ofBaseApp {
 		bool errors[10];
 
 		MyKidoPass::Ptr kaleido;
-		itg::BloomPass::Ptr bloom;
-		itg::RGBShiftPass::Ptr rgbshift;
+		BloomPass::Ptr bloom;
+		RGBShiftPass::Ptr rgbshift;
 		GridShiftPass::Ptr grid;
 		SliceWavePass::Ptr wave;
 		FeedbackPass::Ptr feedback;
@@ -57,7 +57,7 @@ class ofApp : public ofBaseApp {
 
 		void keyPressed(int key);
 		void keyReleased(int key);
-		void mouseMoved(int x, int y );
+		void mouseMoved(int x, int y);
 		void mouseDragged(int x, int y, int button);
 		void mousePressed(int x, int y, int button);
 		void mouseReleased(int x, int y, int button);
