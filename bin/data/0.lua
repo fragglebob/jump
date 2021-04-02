@@ -1,64 +1,54 @@
-
 function draw()
 
-    -- 
-of.feedback(true);
-of.fx_wave(8);
-    of.fx_kale(2, -0.1)
-   
-    -- of.fx_grid(3)
-    of.feedback(true);
-    -- of.fx_wave(4);
-   
+    of.fx_rgb(0.0007)
     
+    
+    of.fx_grid((math.floor(of.beat()/2)%4)+1)
     -- 
-    -- of.feedback(true);
-     
-    -- -- 
+    
+    -- of.fx_ascii()
+    -- of.feedback(true)
+    -- of.fx_rgb(0.0007)
+    -- of.feedback(true)
+    -- of.fx_wave(9)
+    -- of.fx_kale(4, ((of.int_beat())%8)*15.7)
+    -- of.feedback(true)
+    
+    of.fx_kale(0, 15.7)
+    -- of.feedback(true)
+    
 
-    of.fx_kale(2,0)
-    of.fx_grid((math.floor(of.beat()/4)%2)*2+1)
-    of.fx_kale(1,0)
-    
-    -- 
-    -- 
-    -- of.feedback(true);
-    -- 
-    -- of.fx_kale(4)
-    -- of.fx_rgb(0.001)
+    of.fx_ascii((1-of.fft(10)) * 80 +  10)
+    of.fx_rgb(0.0007)
+    -- of.fx_grid(16)
     -- of.fx_grid(1.3)
-
-    of.fx_bloom()
-    of.fx_rgb(0.001)
-    -- of.feedback(true);
-
+    -- of.fx_grid(1 + of.int_beat()/10)
+    
+    of.feedback(true)
 
     
-    of.hsl(of.int_beat() * 60 + of.frame(), math.floor(of.beat())%2, 0.09 )
+    
+    -- of.fx_ascii(20)
+    of.fx_bloom()
+    of.fx_rgb(0.00007)
+    
+    
+    
+    -- of.blend_mode("add")
 
-    of.blend_mode("add")
+   
 
-    local times = 1000;
+    local times = 4;
 
-    local b = of.beat()
-
-    local bP = (  b - math.floor(b))
-
-    local sizeMulitpler = 1200 * bP;
 
     for i = times,1,-1 
     do 
         of.pushMatrix()
-        of.rotate(i+of.frame(), 12.3, 2.3, 5)
-        of.translate(
-            math.cos(i*1.637) * sizeMulitpler, 
-            math.sin(i*1.637) * sizeMulitpler
-    )
-    of.rotate(i+of.frame(), 12.3, 2.3, 5)
-        of.box(of.fft(1) * 90)
+        of.hsl((of.int_beat()) * 60 + (of.frame()+ i)/10, 1.0 - of.fft(12)/2, of.fft(3) * 0.5  + 0.2)
+        of.rotate(of.frame() + i*90, 0.3, 0.2, -0.1)
+        of.box( 300 * of.fft(1) + 200  )
         of.popMatrix()
     end
 
     
-
 end

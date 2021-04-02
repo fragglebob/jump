@@ -9,6 +9,8 @@ void line(float x1, float y1, float x2, float y2) {
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    ofDisableArbTex();
+
     settings.loadFile("settings.xml");
 
     aubiobeat.setup();
@@ -63,6 +65,7 @@ void ofApp::setup(){
     grid = post.createPass<GridShiftPass>();
     wave = post.createPass<SliceWavePass>();
     feedback = post.createPass<FeedbackPass>();
+    ascii = post.createPass<AsciiPass>();
     
     midiMix.setup();
     

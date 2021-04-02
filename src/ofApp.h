@@ -14,6 +14,7 @@
 #include "FeedbackPass.h"
 #include "BloomPass.h"
 #include "RGBShiftPass.h"
+#include "AsciiPass.h"
 #include "ofSol.h"
 #include "ofxAubioBeat.h"
 #include "ofxXmlSettings.h"
@@ -43,6 +44,7 @@ class ofApp : public ofBaseApp {
 		GridShiftPass::Ptr grid;
 		SliceWavePass::Ptr wave;
 		FeedbackPass::Ptr feedback;
+		AsciiPass::Ptr ascii;
 
 		ofxAubioBeat aubiobeat;
 		float lastBeatTime = 0.f;

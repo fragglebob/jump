@@ -113,6 +113,10 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
         app.bloom->enablePass();
     });
 
+    of.set_function("fx_ascii", [&app]() {
+        app.ascii->enablePass();
+    });
+
     of.set_function("beat", [&app]() {
         return app.beatProgress;
     });

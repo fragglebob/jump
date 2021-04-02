@@ -50,6 +50,7 @@ set( ${APP_NAME}_SOURCE_FILES
         src/PostPasses/FeedbackPass.cpp
         src/PostPasses/ConvolutionPass.cpp
         src/PostPasses/BloomPass.cpp
+        src/PostPasses/AsciiPass.cpp
 
         src/ofxAubioBlock.cpp
         src/ofxAubioBeat.cpp
