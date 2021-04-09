@@ -15,6 +15,7 @@
 #include "BloomPass.h"
 #include "RGBShiftPass.h"
 #include "AsciiPass.h"
+#include "MatrixPass.h"
 #include "ofSol.h"
 #include "ofxAubioBeat.h"
 #include "ofxXmlSettings.h"
@@ -45,6 +46,7 @@ class ofApp : public ofBaseApp {
 		SliceWavePass::Ptr wave;
 		FeedbackPass::Ptr feedback;
 		AsciiPass::Ptr ascii;
+		MatrixPass::Ptr matrix;
 
 		ofxAubioBeat aubiobeat;
 		float lastBeatTime = 0.f;

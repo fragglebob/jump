@@ -1,3 +1,4 @@
 <settings>
-    <audioIn>Scarlett 2i4 USB</audioIn>
+    <audioIn>system</audioIn>
+    <audioInApi>jack</audioIn>
 </settings>

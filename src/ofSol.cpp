@@ -113,9 +113,23 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
         app.bloom->enablePass();
     });
 
-    of.set_function("fx_ascii", [&app]() {
-        app.ascii->enablePass();
-    });
+    of.set_function("fx_ascii", sol::overload(
+        [&app]() {
+            app.ascii->enablePass(10.0);
+        },
+        [&app](float scale) {
+            app.ascii->enablePass(scale);
+        }
+    ));
+
+    of.set_function("fx_matrix", sol::overload(
+        [&app](float a, float b, float c, float d) {
+            app.matrix->enablePass(a, b, 0.0f, c, d, 0.0f);
+        },
+        [&app](float a, float b, float c, float d, float e, float f) {
+            app.matrix->enablePass(a, b, c, d, e, f);
+        }
+    ));
 
     of.set_function("beat", [&app]() {
         return app.beatProgress;

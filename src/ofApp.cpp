@@ -31,6 +31,29 @@ void ofApp::setup(){
     streamSettings.setInListener(this);
 
     string audioInDeviceName = settings.getValue("settings:audioIn", "default");
+    string audioInDeviceNameApi = settings.getValue("settings:audioInApi", "default");
+
+    ofSoundDevice::Api api = ofSoundDevice::Api::DEFAULT;
+
+    if(audioInDeviceNameApi == "default") {
+        api = ofSoundDevice::Api::DEFAULT;
+    } else if(audioInDeviceNameApi == "alsa") {
+        api = ofSoundDevice::Api::ALSA;
+    } else if(audioInDeviceNameApi == "pulse") {
+        api = ofSoundDevice::Api::PULSE;
+    } else if(audioInDeviceNameApi == "oss") {
+        api = ofSoundDevice::Api::OSS;
+    } else if(audioInDeviceNameApi == "jack") {
+        api = ofSoundDevice::Api::JACK;
+    } else if(audioInDeviceNameApi == "osx_core") {
+        api = ofSoundDevice::Api::OSX_CORE;
+    } else if(audioInDeviceNameApi == "ms_wasapi") {
+        api = ofSoundDevice::Api::MS_WASAPI;
+    } else if(audioInDeviceNameApi == "ms_asio") {
+        api = ofSoundDevice::Api::MS_ASIO;
+    } else if(audioInDeviceNameApi == "ms_ds") {
+        api = ofSoundDevice::Api::MS_DS;
+    }
 
     if(audioInDeviceName != "default") {
         auto devices = soundStream.getMatchingDevices(audioInDeviceName);
@@ -66,6 +89,7 @@ void ofApp::setup(){
     wave = post.createPass<SliceWavePass>();
     feedback = post.createPass<FeedbackPass>();
     ascii = post.createPass<AsciiPass>();
+    matrix = post.createPass<MatrixPass>();
     
     midiMix.setup();
     
