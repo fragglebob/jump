@@ -52,8 +52,8 @@ class ofApp : public ofBaseApp {
 		float lastBeatTime = 0.f;
 		float lastBpm = 120.0f;
 
-		ofFbo currentFrame;
-		ofFbo feedbackFrame;
+		int currentFbo = 0;
+		ofFbo renderingFlop[2];
 
 		void setup();
 		void update();
@@ -73,12 +73,12 @@ class ofApp : public ofBaseApp {
 
         void audioIn(ofSoundBuffer & input);
 
+		void doRenderPass(std::function<void(ofFbo&, ofFbo&)> func);
+
 		int bpm = 120;
 		int bpmTapCount = 0;
 		float lastBpmTap;
 		float bpmTaps[10];
-
-
 
 		void handleBpmTap(float &time);
 
@@ -106,7 +106,7 @@ class ofApp : public ofBaseApp {
 		
 	private:
 
-		void setupFeedbackLoop();
+		void setupRenderingFbos();
 
 		bool loadScript(std::string path);
 

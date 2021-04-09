@@ -111,3 +111,17 @@ MyKidoPass::MyKidoPass(myPostProcessing* processor, const ofVec2f& aspect, bool 
     { 
         enablePass(segments, ofGetElapsedTimef());
     }
+
+std::function<void(ofFbo&, ofFbo&)> MyKidoPass::getPassFunc(float segments, float time)
+{
+    return [this, segments, time](ofFbo& readFbo, ofFbo& writeFbo) {
+            this->setTime(time);
+            this->setSegments(segments);
+            this->render(readFbo, writeFbo);
+        };
+}
+
+std::function<void(ofFbo&, ofFbo&)> MyKidoPass::getPassFunc(float segments)
+{
+    return getPassFunc(segments, ofGetElapsedTimef());
+}

@@ -90,3 +90,17 @@ void RGBShiftPass::enablePass(float amount)
 { 
     enablePass(amount, 0);
 }
+
+std::function<void(ofFbo&, ofFbo&)> RGBShiftPass::getPassFunc(float amount, float angle)
+{
+    return [this, amount, angle](ofFbo& readFbo, ofFbo& writeFbo) {
+        this->setAmount(amount);
+        this->setAngle(angle);
+        this->render(readFbo, writeFbo);
+    };
+}
+
+std::function<void(ofFbo&, ofFbo&)> RGBShiftPass::getPassFunc(float amount)
+{
+    return getPassFunc(amount, 0);
+}

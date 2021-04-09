@@ -66,3 +66,11 @@ void SliceWavePass::enablePass(float segments)
         this->render(readFbo, writeFbo);
     });
 }
+
+std::function<void(ofFbo&, ofFbo&)> SliceWavePass::getPassFunc(float segments)
+{
+    return [this, segments](ofFbo& readFbo, ofFbo& writeFbo) {
+        this->setSegments(segments);
+        this->render(readFbo, writeFbo);
+    };
+}

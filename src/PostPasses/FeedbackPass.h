@@ -14,6 +14,7 @@ public:
     void allocateFbo();
 
     void enablePass();
+    std::function<void(ofFbo&, ofFbo&)> getPassFunc();
     
 private:
     

@@ -16,6 +16,7 @@ public:
     void setSegments(float v) { segments = v; }
 
     void enablePass(float segments);
+    std::function<void(ofFbo&, ofFbo&)> getPassFunc(float segments);
     
 private:
     

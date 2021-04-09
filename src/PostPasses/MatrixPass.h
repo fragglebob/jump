@@ -11,6 +11,7 @@ public:
     
     void render(ofFbo& readFbo, ofFbo& writeFbo);
 
+    std::function<void(ofFbo&, ofFbo&)> getPassFunc(float a, float b, float c, float d, float e, float f);
     void enablePass(float a, float b, float c, float d, float e, float f);
 
     void setMatrix(float a, float b, float c, float d, float e, float f);

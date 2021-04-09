@@ -85,49 +85,67 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
     of.set_function("lerp", [](float min, float max, float amt) -> float { return ofLerp(min, max, amt); });
 
     of.set_function("fx_grid", [&app](float value) {
-        app.grid->enablePass(value);
+        app.doRenderPass(
+            app.grid->getPassFunc(value)
+        );
     });
 
     of.set_function("feedback", [&app](bool enabled) {
-        app.feedback->enablePass();
+        app.doRenderPass(
+            app.feedback->getPassFunc()
+        );
     });
 
     of.set_function("fx_kale", sol::overload(
         [&app](float value) {
-            app.kaleido->enablePass(value);
+            app.doRenderPass(
+                app.kaleido->getPassFunc(value)
+            );
         },
         [&app](float value, float time) {
-            app.kaleido->enablePass(value, time);
+            app.doRenderPass(
+                app.kaleido->getPassFunc(value, time)
+            );
         }
     ));
 
     of.set_function("fx_wave", [&app](float value) {
-        app.wave->enablePass(value);
+        app.doRenderPass(
+            app.wave->getPassFunc(value)
+        );
     });
 
     of.set_function("fx_rgb", [&app](float value) {
-        app.rgbshift->enablePass(value);
+        app.doRenderPass(
+            app.rgbshift->getPassFunc(value)
+        );
     });
 
     of.set_function("fx_bloom", [&app]() {
-        app.bloom->enablePass();
+        app.doRenderPass(
+            app.bloom->getPassFunc()
+        );
     });
 
     of.set_function("fx_ascii", sol::overload(
         [&app]() {
-            app.ascii->enablePass(10.0);
+            app.doRenderPass(app.ascii->getPassFunc(10.0));
         },
         [&app](float scale) {
-            app.ascii->enablePass(scale);
+            app.doRenderPass(app.ascii->getPassFunc(scale));
         }
     ));
 
     of.set_function("fx_matrix", sol::overload(
         [&app](float a, float b, float c, float d) {
-            app.matrix->enablePass(a, b, 0.0f, c, d, 0.0f);
+            app.doRenderPass(
+                app.matrix->getPassFunc(a, b, 0.0f, c, d, 0.0f)
+            );
         },
         [&app](float a, float b, float c, float d, float e, float f) {
-            app.matrix->enablePass(a, b, c, d, e, f);
+            app.doRenderPass(
+                app.matrix->getPassFunc(a, b, c, d, e, f)
+            );
         }
     ));
 

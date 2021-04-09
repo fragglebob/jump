@@ -67,3 +67,12 @@ void GridShiftPass::enablePass(float rows)
         this->render(readFbo, writeFbo);
     });
 }
+
+
+std::function<void(ofFbo&, ofFbo&)> GridShiftPass::getPassFunc(float rows)
+{
+    return [this, rows](ofFbo& readFbo, ofFbo& writeFbo) {
+        this->setRows(rows);
+        this->render(readFbo, writeFbo);
+    };
+}
