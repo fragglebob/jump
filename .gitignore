@@ -9,3 +9,5 @@ CMakeCache.txt
 compile_commands.json
 Makefile
 Makefile.bak
+bin/ofApp.app/
+.DS_Store

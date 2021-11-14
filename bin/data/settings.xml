@@ -1,4 +1,5 @@
 <settings>
-    <audioIn>system</audioIn>
-    <audioInApi>jack</audioIn>
+    <audioIn>Built-in Microphone</audioIn>
+    <audioOut>Built-in Output</audioOut>
+    <audioApi>default</audioApi>
 </settings>

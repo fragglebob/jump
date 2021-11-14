@@ -13,7 +13,7 @@ set(OF_SOURCE_FILES
         ${OF_DIRECTORY_ABSOLUTE}/libs/openFrameworks/3d/ofNode.cpp
         ${OF_DIRECTORY_ABSOLUTE}/libs/openFrameworks/app/ofAppGLFWWindow.cpp
         ${OF_DIRECTORY_ABSOLUTE}/libs/openFrameworks/app/ofMainLoop.cpp
-        ${OF_DIRECTORY_ABSOLUTE}/libs/openFrameworks/app/ofAppGlutWindow.cpp
+        # ${OF_DIRECTORY_ABSOLUTE}/libs/openFrameworks/app/ofAppGlutWindow.cpp
         ${OF_DIRECTORY_ABSOLUTE}/libs/openFrameworks/app/ofAppNoWindow.cpp
         ${OF_DIRECTORY_ABSOLUTE}/libs/openFrameworks/app/ofAppRunner.cpp
         ${OF_DIRECTORY_ABSOLUTE}/libs/openFrameworks/communication/ofArduino.cpp

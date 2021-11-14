@@ -2,7 +2,7 @@ function draw()
 
     -- of.blend_mode("multiply")
 
-    of.blend_mode("")
+    of.blend_mode("add")
     local times = 4;
 
     for i = times,1,-1 
@@ -18,7 +18,7 @@ function draw()
 
 
 
-    of.fx_rgb(0.0007)
+    -- of.fx_rgb(0.7)
     
     
     of.fx_grid((math.floor(of.beat())%4)+1)
@@ -38,13 +38,13 @@ function draw()
     
     -- of.feedback(true)
     
-    if math.floor(of.bar()) % 2 == 0 then
-        of.fx_ascii((1-of.fft(10)) * 80 +  10)
-        -- of.fx_rgb(0.002)
-    else 
-        of.fx_ascii((of.fft(10)) * 80 +  10)
+    -- if math.floor(of.bar()) % 2 == 0 then
+    --     of.fx_ascii((1-of.fft(10)) * 80 +  10)
+    --     -- of.fx_rgb(0.002)
+    -- else 
+    --     of.fx_ascii((of.fft(10)) * 80 +  10)
        
-    end
+    -- end
     
     
     of.fx_grid(3)
@@ -80,7 +80,7 @@ function draw()
 
     
     --
-    of.fx_kale(1 )
+    -- of.fx_kale(1 )
 
     local ltimes = 60;
     local f = of.frame()
@@ -111,7 +111,7 @@ function draw()
     of.color(math.min(255 - of.fft(1) * 255, 255));
     of.pushMatrix()
     of.rotate(of.frame() + 90 + math.sin(5432)*20, 0.3, 0.2, -0.1)
-    of.box( 100 * of.fft(4) + 150 * of.int_beat() + 20)
+    of.box( 100 * of.fft(4) + 350)
     of.popMatrix()
 
     

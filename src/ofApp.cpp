@@ -31,34 +31,44 @@ void ofApp::setup(){
     streamSettings.setInListener(this);
 
     string audioInDeviceName = settings.getValue("settings:audioIn", "default");
-    string audioInDeviceNameApi = settings.getValue("settings:audioInApi", "default");
+    string audioOutDeviceName = settings.getValue("settings:audioOut", "default");
+    string audioApiName = settings.getValue("settings:audioApi", "default");
 
     ofSoundDevice::Api api = ofSoundDevice::Api::DEFAULT;
 
-    if(audioInDeviceNameApi == "default") {
+    if(audioApiName == "default") {
         api = ofSoundDevice::Api::DEFAULT;
-    } else if(audioInDeviceNameApi == "alsa") {
+    } else if(audioApiName == "alsa") {
         api = ofSoundDevice::Api::ALSA;
-    } else if(audioInDeviceNameApi == "pulse") {
+    } else if(audioApiName == "pulse") {
         api = ofSoundDevice::Api::PULSE;
-    } else if(audioInDeviceNameApi == "oss") {
+    } else if(audioApiName == "oss") {
         api = ofSoundDevice::Api::OSS;
-    } else if(audioInDeviceNameApi == "jack") {
+    } else if(audioApiName == "jack") {
         api = ofSoundDevice::Api::JACK;
-    } else if(audioInDeviceNameApi == "osx_core") {
+    } else if(audioApiName == "osx_core") {
         api = ofSoundDevice::Api::OSX_CORE;
-    } else if(audioInDeviceNameApi == "ms_wasapi") {
+    } else if(audioApiName == "ms_wasapi") {
         api = ofSoundDevice::Api::MS_WASAPI;
-    } else if(audioInDeviceNameApi == "ms_asio") {
+    } else if(audioApiName == "ms_asio") {
         api = ofSoundDevice::Api::MS_ASIO;
-    } else if(audioInDeviceNameApi == "ms_ds") {
+    } else if(audioApiName == "ms_ds") {
         api = ofSoundDevice::Api::MS_DS;
     }
+    
+    streamSettings.setApi(api);
 
     if(audioInDeviceName != "default") {
-        auto devices = soundStream.getMatchingDevices(audioInDeviceName);
+        auto devices = soundStream.getMatchingDevices(audioInDeviceName, UINT_MAX, UINT_MAX, api);
         if(!devices.empty()){
             streamSettings.setInDevice(devices[0]);
+        }
+    }
+
+    if(audioOutDeviceName != "default") {
+        auto devices = soundStream.getMatchingDevices(audioOutDeviceName, UINT_MAX, UINT_MAX, api);
+        if(!devices.empty()){
+            streamSettings.setOutDevice(devices[0]);
         }
     }
     

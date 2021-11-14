@@ -10,7 +10,7 @@ cmake_minimum_required( VERSION 3.3 )
 cmake_policy( SET CMP0057 NEW)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_C_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
 # ========================================================
 # ===================== User Settings ====================
@@ -63,12 +63,26 @@ include_directories(/usr/local/include ${LUA_INCLUDE_DIR})
 # find_package(aubio REQUIRED)
 # include_directories(/usr/local/include ${AUBIO_INCLUDE_DIR})
 
-set(EXTRA_LIBS 
-        asound 
-        fftw3
-        aubio
-        ${LUA_LIBRARIES}
-)
+
+if( APPLE ) # Apple is a Unix, too. So dont ask only first UNIX
+find_library(audio_lib aubio)
+        set(EXTRA_LIBS 
+                ${audio_lib}
+                ${LUA_LIBRARIES}
+        )
+elseif( UNIX )
+        set(EXTRA_LIBS 
+                asound 
+                fftw3
+                audio
+                ${LUA_LIBRARIES}
+        )
+        
+else()
+    message( FATAL_ERROR "Operating System not supported" )
+endif()
+
+
 
 set(OFX_ADDONS_ACTIVE ofxMidi ofxXmlSettings)
 
@@ -83,65 +97,30 @@ include(cmake/ofxXmlSettings.cmake)
 
 include(cmake/openFrameworks.cmake)
 
-if( UNIX )
+if( APPLE ) # Apple is a Unix, too. So dont ask only first UNIX
+        include(cmake/openFrameworksApple.cmake)
+elseif( UNIX )
         include(cmake/openFrameworksLinux.cmake)
 else()
     message( FATAL_ERROR "Operating System not supported" )
 endif()
 
+include(cmake/config.cmake)
 
-include_directories(${OF_CORE_HEADERS})
-
-# ============================================================================
-# ----------------------------- Setting Libraries ----------------------------
-add_library( core       OBJECT ${OF_SOURCE_FILES} )
-add_library( of_static     STATIC $<TARGET_OBJECTS:core> )
-add_library( of_shared  SHARED $<TARGET_OBJECTS:core> )
-
-# -------------------------------- Linking --------------------------------
-target_link_libraries(  of_static ${OF_CORE_LIBS} )
-target_link_libraries(  of_shared ${OF_CORE_LIBS} )
-
-# -------------------------------- Properties --------------------------------
-set_target_properties( of_static PROPERTIES OUTPUT_NAME openFrameworksStatic)
-set_target_properties( of_shared PROPERTIES OUTPUT_NAME openFrameworksShared)
-
-
-
-
-
-
-
+if( APPLE ) # Apple is a Unix, too. So dont ask only first UNIX
+        include(cmake/configApple.cmake)
+elseif( UNIX )
+        include(cmake/configLinux.cmake)
+else()
+    message( FATAL_ERROR "Operating System not supported" )
+endif()
 
 
 # ============================================================================
-# ------------------------------ Compiler Flags ------------------------------
-set_source_files_properties( ${OF_SOURCE_FILES} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -pthread")
-set_source_files_properties( ${${APP_NAME}_SOURCE_FILES} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -pthread")
-
+# ------------------------------- APP CONFIGURATION --------------------------
 # ============================================================================
-# ------------------------------ Compile and Link ----------------------------
-add_executable( ${APP_NAME} ${${APP_NAME}_SOURCE_FILES} )
-
-
-set_target_properties( of_shared PROPERTIES POSITION_INDEPENDENT_CODE TRUE )
-
-set_target_properties( of_shared
-        PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin
-        )
-
-set_target_properties( of_static PROPERTIES POSITION_INDEPENDENT_CODE TRUE )
-
-set_target_properties( of_static
-        PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin
-        )
-
-
-target_link_libraries( ${APP_NAME} $<TARGET_FILE:of_static> ${OF_CORE_LIBS} ${OFX_ADDONS_ACTIVE} ${EXTRA_LIBS}  )
-
+add_dependencies( ${APP_NAME} of_shared )
 set_target_properties( ${APP_NAME}
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY    ${PROJECT_SOURCE_DIR}/bin
-        )
+)

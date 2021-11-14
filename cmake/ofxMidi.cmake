@@ -6,7 +6,7 @@ file( GLOB_RECURSE OFX_MIDI_CPP
         "${OF_DIRECTORY_ABSOLUTE}/addons/ofxMidi/src/*.cpp"
         "${OF_DIRECTORY_ABSOLUTE}/addons/ofxMidi/src/desktop/*.cpp"
         "${OF_DIRECTORY_ABSOLUTE}/addons/ofxMidi/libs/*.cpp"
-        )
+)
 
 # -----------------------------------------------------------------
 # --- Set ALL directories of the addOn, which contain .h files
@@ -16,7 +16,7 @@ include_directories(
         "${OF_DIRECTORY_ABSOLUTE}/addons/ofxMidi/src"
         "${OF_DIRECTORY_ABSOLUTE}/addons/ofxMidi/src/desktop"
         "${OF_DIRECTORY_ABSOLUTE}/addons/ofxMidi/libs/rtmidi"
-        )
+)
 
 # -----------------------------------------------------------------
 # --- Set the keyword, so you can simply include the addOn
