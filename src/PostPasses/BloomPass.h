@@ -51,6 +51,7 @@ public:
     
     bool hasArbShader() { return true; }
 
+    std::function<void(ofFbo&, ofFbo&)> getPassFunc();
     void enablePass();
     
 private:

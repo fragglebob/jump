@@ -12,6 +12,7 @@ public:
     void render(ofFbo& readFbo, ofFbo& writeFbo);
 
     void enablePass(float scale);
+    std::function<void(ofFbo&, ofFbo&)> getPassFunc(float scale);
 
       float getScale(){ return scale; }
     void setScale(float v) { scale = v; }

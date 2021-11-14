@@ -113,28 +113,31 @@ void ofApp::setup(){
 
     modTimes[0] = std::filesystem::last_write_time(ofToDataPath("0.lua"));
 
-    setupFeedbackLoop();
+    currentFbo = 0;
+    setupRenderingFbos();
+    
 
 }
 
-void ofApp::setupFeedbackLoop()
+void ofApp::setupRenderingFbos()
 {
     ofFbo::Settings s;
     
     s.width = ofGetWidth();
-    s.height =ofGetHeight();
+    s.height = ofGetHeight();
     s.textureTarget = GL_TEXTURE_2D;
 
-    currentFrame.allocate(s);
-    feedbackFrame.allocate(s);
+    s.useDepth = true;
+    s.depthStencilInternalFormat = GL_DEPTH_COMPONENT24;
+    s.depthStencilAsTexture = true;
 
-    currentFrame.begin();
-    ofClear(255,255,255, 0);
-    currentFrame.end();
-
-    feedbackFrame.begin();
-    ofClear(255,255,255, 0);
-    feedbackFrame.end();
+    for (size_t i = 0; i < 2; i++)
+    {
+        renderingFlop[i].allocate(s);
+        renderingFlop[i].begin();
+        ofClear(255,255,255, 0);
+        renderingFlop[i].end();
+    }
 }
 
 void ofApp::setBpm(float bpm) {
@@ -229,9 +232,51 @@ void ofApp::update(){
 
 }
 
+void ofApp::doRenderPass(std::function<void(ofFbo&, ofFbo&)> func) {
+
+    renderingFlop[currentFbo].end();
+
+    int nextFbo = currentFbo == 1 ? 0 : 1;
+
+    renderingFlop[nextFbo].begin(OF_FBOMODE_NODEFAULTS);
+    ofClear(0,0,0,0);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    renderingFlop[nextFbo].end();
+
+
+    ofPushStyle();
+    glPushAttrib(GL_ENABLE_BIT);
+    glDisable(GL_LIGHTING);
+    ofSetColor(255, 255, 255);
+    ofEnableAlphaBlending();
+
+    ofDisableDepthTest();
+    func(renderingFlop[currentFbo], renderingFlop[nextFbo]);
+    ofEnableDepthTest();
+
+    glPopAttrib();
+    ofPopStyle();
+
+    glEnable(GL_LIGHTING);
+
+    currentFbo = nextFbo;
+
+    renderingFlop[currentFbo].begin(OF_FBOMODE_NODEFAULTS);
+
+}
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+
+    currentFbo = 0;
+
+    for (size_t i = 0; i < 2; i++)
+    {
+        renderingFlop[i].begin();
+        ofClear(0,0,0,0);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        renderingFlop[i].end();
+    }
 
     // disable fx for code to enabled later
     // kaleido->disable();
@@ -247,26 +292,7 @@ void ofApp::draw(){
 
     ofEnableAlphaBlending();
 
-    post.begin();
-
-    
-
-    // beginFeedback();
-
-
-
-   
-
-    // if(feedbackEnabled) {
-    //     ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-    //     ofSetDepthTest(false);
-    //     drawFeedback(feedbackFrame, ofGetWidth(), ofGetHeight());
-    //     ofSetDepthTest(true);
-    //     feedbackEnabled = false;
-    //     ofEnableBlendMode(OF_BLENDMODE_DISABLED);
-    // }
-
-    
+    // post.begin();
 
     ofDisableLighting();
 
@@ -274,6 +300,7 @@ void ofApp::draw(){
     auto midY = float(ofGetHeight() / 2.0);
 
     ofPushStyle();
+    glPushAttrib(GL_ENABLE_BIT);
     ofPushMatrix();
 
     ofTranslate(midX,midY);
@@ -282,6 +309,8 @@ void ofApp::draw(){
 
     light.enable();
     amb.enable();
+
+    renderingFlop[currentFbo].begin(OF_FBOMODE_NODEFAULTS);
 
     if(errors[0] == false) {
         sol::protected_function drawFx = lua["draw"];
@@ -294,74 +323,23 @@ void ofApp::draw(){
         }
     }
 
+    renderingFlop[currentFbo].end();
+
+    
 
     ofPopStyle();
     ofPopMatrix();
 
-    // endFeedback();
 
-    post.end();
+    renderingFlop[currentFbo].draw(0, 0, ofGetWidth(), ofGetHeight());
 
-    
+    // post.end();
+
+    post.clearEnabled();
 
     
 
 }
-
-void ofApp::beginFeedback() {
-
-    currentFrame.begin(OF_FBOMODE_NODEFAULTS);
-
-    // // ofMatrixMode(OF_MATRIX_PROJECTION);
-    // ofPushMatrix();
-    
-    // // ofMatrixMode(OF_MATRIX_MODELVIEW);
-    // ofPushMatrix();
-    
-    // ofViewport(0, 0, currentFrame.getWidth(), currentFrame.getHeight());
-    
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    
-    // ofPushStyle();
-    // glPushAttrib(GL_ENABLE_BIT);
-
-}
-
-
-void ofApp::endFeedback() {
-
-    
-    // glPopAttrib();
-    // ofPopStyle();
-    
-    // // ofMatrixMode(OF_MATRIX_PROJECTION);
-    // ofPopMatrix();
-    
-    // // ofMatrixMode(OF_MATRIX_MODELVIEW);
-    // ofPopMatrix();
-    
-    currentFrame.end();
-
-    feedbackFrame.begin(OF_FBOMODE_NODEFAULTS);
-    drawFeedback(currentFrame, ofGetWidth(), ofGetHeight());
-    feedbackFrame.end();
-
-    // ofViewport(0, 0, ofGetWidth(), ofGetHeight());
-    
-    drawFeedback(currentFrame, ofGetWidth(), ofGetHeight());
-
-}
-
-void ofApp::drawFeedback(ofFbo& fbo, int width, int height) {
-
-    glPushAttrib(GL_ENABLE_BIT);
-    glDisable(GL_LIGHTING);
-    ofSetColor(255, 255, 255);
-    fbo.draw(0,0, width, height);
-    glPopAttrib();
-    ofPopStyle();
-}
-
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
@@ -405,6 +383,7 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
+    setupRenderingFbos();
     post.resize(w, h, false);
     feedback->allocateFbo();
 }

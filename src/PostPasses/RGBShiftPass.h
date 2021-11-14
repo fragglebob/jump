@@ -53,6 +53,9 @@ public:
     float getAngle() { return angle; }
     void setAngle(float v) { angle = v; }
 
+    std::function<void(ofFbo&, ofFbo&)> getPassFunc(float amount, float angle);
+    std::function<void(ofFbo&, ofFbo&)> getPassFunc(float amount);
+
     void enablePass(float amount, float angle);
     void enablePass(float amount);
 

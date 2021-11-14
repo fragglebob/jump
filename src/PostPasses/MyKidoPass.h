@@ -18,6 +18,10 @@ public:
     bool getTime(){ return time; }
     void setTime(float t) { time = t; }
 
+
+    std::function<void(ofFbo&, ofFbo&)> getPassFunc(float segments, float time);
+    std::function<void(ofFbo&, ofFbo&)> getPassFunc(float segments);
+
     void enablePass(float segments, float time);
     void enablePass(float segments);
     

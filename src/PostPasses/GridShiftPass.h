@@ -16,6 +16,7 @@ public:
     void setRows(float v) { rows = v; }
 
     void enablePass(float rows);
+    std::function<void(ofFbo&, ofFbo&)> getPassFunc(float rows);
     
 private:
     

@@ -123,3 +123,10 @@ void BloomPass::enablePass()
         this->render(readFbo, writeFbo);
     });
 }
+
+std::function<void(ofFbo&, ofFbo&)> BloomPass::getPassFunc()
+{
+    return [this](ofFbo& readFbo, ofFbo& writeFbo) {
+        this->render(readFbo, writeFbo);
+    };
+}

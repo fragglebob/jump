@@ -100,3 +100,11 @@ void AsciiPass::enablePass(float scale)
         this->render(readFbo, writeFbo);
     });
 }
+
+std::function<void(ofFbo&, ofFbo&)> AsciiPass::getPassFunc(float scale)
+{
+    return [this, scale](ofFbo& readFbo, ofFbo& writeFbo) {
+        this->setScale(scale);
+        this->render(readFbo, writeFbo);
+    };
+}

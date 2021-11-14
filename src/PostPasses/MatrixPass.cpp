@@ -76,3 +76,11 @@ void MatrixPass::enablePass(float a, float b, float c, float d, float e, float f
         this->render(readFbo, writeFbo);
     });
 }
+
+std::function<void(ofFbo&, ofFbo&)> MatrixPass::getPassFunc(float a, float b, float c, float d, float e, float f)
+{
+    return [this, a, b, c, d, e, f](ofFbo& readFbo, ofFbo& writeFbo) {
+        this->setMatrix(a, b, c, d, e, f);
+        this->render(readFbo, writeFbo);
+    };
+}
