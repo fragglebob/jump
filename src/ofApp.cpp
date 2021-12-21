@@ -407,3 +407,41 @@ void ofApp::beatEvent(float & time) {
     setBpm(aubiobeat.bpm);
     beatsCounted++;
 }
+
+void ofApp::startTexture(std::string filepath) {
+
+    auto search = textures.find(filepath);
+
+    if (search == textures.end()) {
+
+        auto loadSearch = loadedTextures.find(filepath);
+
+        if(loadSearch != loadedTextures.end()) {
+            return;
+        }
+
+        std::shared_ptr<ofTexture> tex = make_shared<ofTexture>();
+
+        bool loaded = ofLoadImage(*tex, filepath);
+
+        loadedTextures.insert(std::pair{filepath, loaded});
+
+        if(loaded == true) {
+            textures.insert(std::pair{filepath, tex});
+            tex->bind();
+        } else {
+            std::cout << "couldn't load image: " << filepath << std::endl;
+        }
+        return;
+    }
+
+    search->second->bind();
+}
+
+void ofApp::endTexture(std::string filepath) {
+    auto search = textures.find(filepath);
+
+    if (search != textures.end()) {
+        search->second->unbind();
+    }
+}

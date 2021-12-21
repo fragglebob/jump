@@ -103,6 +103,12 @@ class ofApp : public ofBaseApp {
 		void setFeeback(bool feedback) { feedbackEnabled = feedback; }
 
 		ofxXmlSettings settings;
+
+		std::map<std::string, std::shared_ptr<ofTexture>> textures;
+		std::map<std::string, bool> loadedTextures;
+
+		void startTexture(std::string filepath);
+		void endTexture(std::string filepath);
 		
 	private:
 

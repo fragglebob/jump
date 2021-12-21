@@ -165,6 +165,14 @@ void ofSol::create_interop(sol::state& lua, ofApp& app) {
         return app.currentBar;
     });
 
+    of.set_function("texture_start", [&app](std::string imagePath) {
+        app.startTexture(imagePath);
+    });
+
+    of.set_function("texture_end", [&app](std::string imagePath) {
+        app.endTexture(imagePath);
+    });
+
 }
 
 void ofSol::blendMode(std::string mode) {

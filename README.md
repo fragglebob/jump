@@ -151,3 +151,7 @@ Currently only got builds working on linux with cmake. Adapated it from ofxCmake
 * ofxPostProcessing
 * ofxMidi
 * ofxXmlSettings - included with openframeworks
+
+## Credits
+
+bin/data/fish-fingers.jpg - © Superbass / CC-BY-SA-4.0 (via Wikimedia Commons) - https://commons.wikimedia.org/wiki/File:Fishfinger_classic_fried_2.jpg
